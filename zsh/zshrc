@@ -61,17 +61,17 @@ alias sdu='launchctl'
 alias jd='log show --style syslog --last 1h'
 
 # Human-readable commands
-alias cal='TZ=Asia/Bangkok ncal'
+alias cal='TZ=Africa/Nairobi ncal'
 alias du='du -h'
 alias free='top -l 1 | grep PhysMem'
 
 # Aliases: safety
-alias cp='cp --interactive'
-alias mv='mv --interactive'
+# alias cp='cp --interactive'
+# alias mv='mv --interactive'
 
 # Aliases: misc
 mk() {
-  mkdir --parents "$1" && cd "$1"
+  mkdir "$1" && cd "$1"
 }
 alias rf='rm -rf'
 alias py='python3'
