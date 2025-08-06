@@ -76,3 +76,6 @@ export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 
 
 export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+
+# Created by `pipx` on 2025-08-01 12:18:18
+export PATH="$PATH:/Users/code/.local/bin"
