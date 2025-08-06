@@ -17,7 +17,7 @@ alias ga='git add'
 alias gap='ga --patch'
 alias gb='git branch'
 alias gba='gb --all'
-alias gc='git commit'
+alias gc='git commit --signoff'
 alias gca='gc --amend --no-edit --signoff'
 alias gce='gc --amend'
 alias gco='git checkout'
@@ -305,3 +305,6 @@ autoload -Uz compinit
 compinit
 # End of Docker CLI completions
 export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+
+# Created by `pipx` on 2025-08-01 12:18:18
+export PATH="$PATH:/Users/code/.local/bin"
