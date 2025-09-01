@@ -28,10 +28,14 @@
     coloring = highlightRecent
     date = relative
 
+[merge]
+    conflictstyle = diff3
+
 [diff]
-    context = 3  # less context in diffs
+    colorMoved = default
+    #context = 3  # less context in diffs
     renames = copies  # detect copies as renames in diffs
-    interHunkContext = 10  # merge near hunks in diffs
+    #interHunkContext = 10  # merge near hunks in diffs
 
 [init]
     defaultBranch = main
@@ -114,12 +118,16 @@
     remoteBranch = magenta
 
 [interactive]
-    diffFilter = diff-so-fancy --patch
+    diffFilter = delta --color-only
+    #diffFilter = diff-so-fancy --patch
     singlekey = true
+[delta]
+    navigate = true    # use n and N to move between diff sections
+    side-by-side = true
 
 # Third-party: diff-so-fancy
-[diff-so-fancy]
-    markEmptyLines = false
+#[diff-so-fancy]
+#    markEmptyLines = false
 
 # URL shortcuts
 [url "ssh://git@github.com/"]

@@ -17,7 +17,7 @@ node_modules
 # claude
 .claude
 **/.claude/settings.local.json
-
+CLAUDE.md
 
 # Rust specific
 target/
