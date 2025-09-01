@@ -7,7 +7,9 @@ alias e="$EDITOR"
 alias E="sudo -e"
 
 # Aliases: ls
-alias l='eza -1A --group-directories-first --color=always --git-ignore'
+# # ---- Eza (better ls) -----
+# alias l='eza -1A --group-directories-first --color=always --git-ignore'
+alias l="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
 alias ls='l'
 alias la='l -l --time-style="+%Y-%m-%d %H:%M" --no-permissions --octal-permissions'
 alias tree='l --tree'
@@ -17,7 +19,7 @@ alias ga='git add'
 alias gap='ga --patch'
 alias gb='git branch'
 alias gba='gb --all'
-alias gc='git commit --signoff'
+alias gc='git commit'
 alias gca='gc --amend --no-edit --signoff'
 alias gce='gc --amend'
 alias gco='git checkout'
@@ -118,7 +120,7 @@ PROMPT2=$'%{\033[33m%} ... %{\033[0m%}'
 RPROMPT=$'%(0?..%(130?..%{\033[31m%}%?%{\033[0m%}))'
 
 # ZLE
-KEYTIMEOUT=1  # 10ms for grouping escape sequences
+KEYTIMEOUT=10000 # 10ms for grouping escape sequences
 WORDCHARS='-_:'
 
 setopt interactive_comments
@@ -212,11 +214,79 @@ bindkey '^Z' fg-ctrl-z
 
 # source $ZSH/oh-my-zsh.sh
 
-# Plugin: zoxide
+# set up fzf key bindings and fuzzy completion
+eval "$(fzf --zsh)"
+alias nlof="~/.config/scripts/fzf_list_old_files.sh"
+
+export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
+
+# --- setup fzf theme ---
+fg="#CBE0F0"
+bg="#011628"
+bg_highlight="#143652"
+purple="#B388FF"
+blue="#06BCE4"
+cyan="#2CF9ED"
+
+export FZF_DEFAULT_OPTS="--color=fg:${fg},bg:${bg},hl:${purple},fg+:${fg},bg+:${bg_highlight},hl+:${purple},info:${blue},prompt:${cyan},pointer:${cyan},marker:${cyan},spinner:${cyan},header:${cyan}"
+
+# Use fd (https://github.com/sharkdp/fd) for listing path candidates.
+# - The first argument to the function ($1) is the base path to start traversal
+# - See the source code (completion.{bash,zsh}) for the details.
+_fzf_compgen_path() {
+  fd --hidden --exclude .git . "$1"
+}
+
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+  fd --type=d --hidden --exclude .git . "$1"
+}
+
+# ----- Bat (better cat) -----
+export BAT_THEME=tokyonight_night
+
+show_file_or_dir_preview="if [ -d {} ]; then eza --tree --color=always {} | head -200; else bat -n --color=always --line-range :500 {}; fi"
+
+export FZF_CTRL_T_OPTS="--preview '$show_file_or_dir_preview'"
+export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
+
+export BAT_STYLE=full
+# export FZF_GIT_CAT=bat --style=$BAT_STYLE --color=$FZF_GIT_COLOR
+export FZF_GIT_COLOR=always
+export FZF_GIT_PAGER=$(git config --get core.pager)
+export FZF_GIT_PREVIEW_COLOR=always
+# source ~/.config/fzf-git.sh/fzf-git.sh
+source ~/.config/scripts/fzf_git.sh
+
+
+# Advanced customization of fzf options via _fzf_comprun function
+# - The first argument to the function is the name of the command.
+# - You should make sure to pass the rest of the arguments to fzf.
+_fzf_comprun() {
+  local command=$1
+  shift
+
+  case "$command" in
+    cd)           fzf --preview 'eza --tree --color=always {} | head -200' "$@" ;;
+    export|unset) fzf --preview "eval 'echo ${}'"         "$@" ;;
+    ssh)          fzf --preview 'dig {}'                   "$@" ;;
+    *)            fzf --preview "$show_file_or_dir_preview" "$@" ;;
+  esac
+}
+
+# thefuck alias
+eval $(thefuck --alias)
+eval $(thefuck --alias fk)
+
+# Plugin: zoxide ---- Zoxide (better cd) ----
 export _ZO_FZF_OPTS="$FZF_DEFAULT_OPTS --no-tac --select-1 --exit-0"
-eval "$(zoxide init zsh --no-cmd)"
+# eval "$(zoxide init zsh --no-cmd)"
+eval "$(zoxide init zsh)"
 alias z='__zoxide_zi'
 alias ~='cd ~'
+# alias cd="z"
 ze() {
   DIR=$(zoxide query -i "$@")
   [ -n "$DIR" ] && cd "$DIR" && e .
@@ -225,9 +295,12 @@ ze() {
 # Plugin: autosuggestions
 source $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#606090'
-ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=40
+# use atuin for history
+source $HOME/.config/scripts/atuin.sh
+
+# ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#606090'
+# ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+# ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=40
 
 # Plugin: syntax highlighting
 source $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -308,3 +381,6 @@ export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
 
 # Created by `pipx` on 2025-08-01 12:18:18
 export PATH="$PATH:/Users/code/.local/bin"
+
+# bun completions
+[ -s "/Users/code/.bun/_bun" ] && source "/Users/code/.bun/_bun"
