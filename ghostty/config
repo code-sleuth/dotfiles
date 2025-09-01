@@ -1,51 +1,69 @@
-# ghostty +show-config --default --docs
-# ghostty +list-themes
+# By default Reload config with shft + cmd + ,
+config-file = themes/rosepine
+background = #000000
+background-opacity = 0.75
+background-blur-radius = 23
 
-font-family                    = Symbols Nerd Font Mono
-font-family                    = PragmataPro Liga
-font-family-bold               = PragmataPro Liga
-font-family-italic             = PragmataPro Liga
-font-family-bold-italic        = PragmataPro Liga
+font-family = JetBrainsMonoNL Nerd Font
+font-size = 20
+cursor-style = block
+cursor-style-blink = false
+cursor-invert-fg-bg = true
 
-font-feature                   = calt
-font-feature                   = liga
-font-feature                   = ss13
+macos-titlebar-style = hidden
+macos-option-as-alt = true
+mouse-hide-while-typing = true
 
-font-size                      = 20
-window-inherit-font-size       = true
+confirm-close-surface = false
+window-decoration = auto
+window-padding-x = 10
+window-padding-y = 10
+window-padding-balance = false
 
-# Look and Feel
-adjust-cursor-thickness        = 3
-adjust-underline-position      = 3
-bold-is-bright                 = true
-cursor-invert-fg-bg            = true
-cursor-opacity                 = 0.8
-link-url                       = true
-mouse-hide-while-typing        = true
-theme                          = dark:tokyonight_night,light:tokyonight_day
-window-vsync                   = true
+auto-update = check
+auto-update-channel = stable
 
-# Other
-clipboard-paste-protection     = true
-clipboard-trim-trailing-spaces = true
-copy-on-select                 = true
-macos-auto-secure-input        = true
-macos-secure-input-indication  = true
-quit-after-last-window-closed  = true
-scrollback-limit               = 4200
-shell-integration              = fish
-shell-integration-features     = cursor,sudo,title
+# extras
+shell-integration-features = no-cursor
+copy-on-select = clipboard
 
-# Key bindings
-keybind                        = ctrl+h=goto_split:left
-keybind                        = ctrl+j=goto_split:bottom
-keybind                        = ctrl+k=goto_split:top
-keybind                        = ctrl+l=goto_split:right
-keybind                        = ctrl+shift+h=new_split:left
-keybind                        = ctrl+shift+j=new_split:down
-keybind                        = ctrl+shift+k=new_split:up
-keybind                        = ctrl+shift+l=new_split:right
-keybind                        = super+shift+enter=new_split:auto
-keybind                        = super+shift+i=inspector:toggle
-keybind                        = super+shift+r=reload_config
-keybind                        = super+t=new_tab
+# Custom Keybinds & Config (super represents cmd key on mac)
+# For Simple Keybinds
+# keybind = super+r=reload_config
+keybind = super+i=inspector:toggle
+keybind = super+b>,=toggle_quick_terminal
+
+# Similar Tmux but with Ghostty
+# (ctrl b for tmux -> cmb b for ghostty)
+keybind = super+b>r=reload_config
+keybind = super+b>x=close_surface
+# this only works if you have `macos-titlebar-style = tabs or native or transparent`
+# else it behaves like new window
+keybind = super+b>c=new_tab
+keybind = super+b>n=new_window
+
+# tab nav
+keybind = super+b>1=goto_tab:1
+keybind = super+b>2=goto_tab:2
+keybind = super+b>3=goto_tab:3
+keybind = super+b>4=goto_tab:4
+keybind = super+b>5=goto_tab:5
+keybind = super+b>6=goto_tab:6
+keybind = super+b>7=goto_tab:7
+keybind = super+b>8=goto_tab:8
+keybind = super+b>9=goto_tab:9
+
+# splitting
+keybind = super+b>\=new_split:right
+keybind = super+b>-=new_split:down
+keybind = super+b>e=equalize_splits
+
+# split nav (setting this to control will not work if tmux already uses it)
+keybind = super+b>h=goto_split:left
+keybind = super+b>j=goto_split:bottom
+keybind = super+b>k=goto_split:top
+keybind = super+b>l=goto_split:right
+
+#Shaders
+# custom-shader = shaders/bettercrt.glsl
+# custom-shader = shaders/retro-terminal.glsl
