@@ -63,12 +63,12 @@
         "ungoogled-chromium"
         "wezterm"
         "zed"
-	      "wireshark"
+        "wireshark"
         "google-chrome"
       ];
       homebrew.brews = [
-	      "imagemagick"
-				"python@3.13"
+        "imagemagick"
+        "python@3.13"
         "asciinema"
         "atuin"
         "awscli"
@@ -186,7 +186,7 @@
     darwinConfigurations."Ibrahims-Thanos" = nix-darwin.lib.darwinSystem {
       system = "aarch64-darwin";
       modules = [
-	configuration
+        configuration
         home-manager.darwinModules.home-manager {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
