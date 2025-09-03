@@ -19,12 +19,88 @@
       # $ nix-env -qaP | grep wget
       environment.systemPackages =
         [
+          # Core utilities
           pkgs.vim
           pkgs.direnv
           pkgs.sshs
           pkgs.glow
+          pkgs.ffmpeg
+          
+          # Shell and terminal tools
           pkgs.nushell
           pkgs.carapace
+          pkgs.starship
+          pkgs.atuin
+          pkgs.zoxide
+          pkgs.tmux
+          pkgs.bat
+          pkgs.eza
+          pkgs.fd
+          pkgs.fzf
+          pkgs.ripgrep
+          pkgs.tree
+          
+          # Development tools
+          pkgs.neovim
+          pkgs.git-delta
+          pkgs.lazygit
+          pkgs.lazydocker
+          pkgs.gh
+          pkgs.jq
+          pkgs.yazi
+          
+          # Programming languages and tools
+          pkgs.go
+          pkgs.python313
+          pkgs.nodejs
+          pkgs.yarn
+          pkgs.pnpm
+          pkgs.zig
+          
+          # Build tools
+          pkgs.cmake
+          pkgs.ninja
+          pkgs.gnumake
+          pkgs.gcc
+          pkgs.binutils
+          
+          # System utilities
+          pkgs.coreutils
+          pkgs.gawk
+          pkgs.gnused
+          pkgs.wget
+          pkgs.imagemagick
+          pkgs.stow
+          
+          # Development services
+          pkgs.redis
+          pkgs.postgresql_16
+          pkgs.protobuf
+          
+          # Cloud and container tools
+          pkgs.awscli
+          pkgs.docker-compose
+          pkgs.kubernetes-helm
+          pkgs.terraform
+          
+          # Security and utilities
+          pkgs.pass
+          pkgs.pipx
+          
+          # Entertainment
+          pkgs.cmatrix
+          pkgs.asciinema
+          
+          # Fonts
+          pkgs.nerd-fonts.hack
+          pkgs.nerd-fonts.jetbrains-mono
+          
+          # GUI applications (can also be installed via homebrew casks if preferred)
+          pkgs.alacritty
+          pkgs.wezterm 
+          pkgs.ungoogled-chromium
+          pkgs.wireshark
+          pkgs.zed-editor
         ];
       system.primaryUser = "code";
       nix.settings.experimental-features = "nix-command flakes";
@@ -43,7 +119,7 @@
         finder.AppleShowAllExtensions = true;
         finder.FXPreferredViewStyle = "clmv";
         loginwindow.LoginwindowText = "batman 🦇";
-        screencapture.location = "~/Downloads/screenshots";
+        screencapture.location = "~/Desktop/screenshots";
         screensaver.askForPasswordDelay = 10;
       };
 
@@ -51,110 +127,67 @@
       homebrew.enable = true;
       homebrew.onActivation.cleanup = "zap";
       homebrew.casks = [
-        "aerospace"
-        "alacritty"
-        "docker-desktop"
-        "font-hack-nerd-font"
-        "font-jetbrains-mono-nerd-font"
-        "gimp@dev"
-        "miniconda"
-        "rstudio"
-        "stats"
-        "ungoogled-chromium"
-        "wezterm"
-        "zed"
-        "wireshark"
-        "google-chrome"
+        # GUI apps that are better managed through homebrew or unavailable in nix
+        "docker-desktop"      # Proprietary Docker Desktop
+        "miniconda"           # Conda environment management
+        "rstudio"             # RStudio IDE (complex nix setup)
+        "stats"               # macOS system monitor (not in nix)
+        "google-chrome"       # Proprietary browser
+        "gimp@dev"           # GIMP development version
       ];
       homebrew.brews = [
-        "imagemagick"
-        "python@3.13"
-        "asciinema"
-        "atuin"
-        "awscli"
-        "bat"
-        "binutils"
-        "buildkit"
+        # Libraries and low-level tools that may be needed for system compatibility
         "libpng"
         "glib"
         "pixman"
-        "capstone"
-        "carapace"
-        "cmake"
-        "cmatrix"
         "gmp"
-        "coreutils"
-        "dbmate"
-        "diff-so-fancy"
-        "docker-compose"
-        "eksctl"
         "expat"
-        "eza"
-        "fd"
-        "flock"
-        "fzf"
         "mpfr"
-        "gawk"
         "isl"
         "libmpc"
-        "gcc"
-        "geni"
-        "gh"
-        "git-delta"
-        "gnu-sed"
         "gnutls"
         "libusb"
-        "go"
         "pkgconf"
-        "helm"
         "jpeg"
         "jpeg-turbo"
-        "jq"
-        "kind"
-        "lazydocker"
-        "lazygit"
-        "ledger"
+        "zlib"
+        "texinfo"
+        
+        # Tools that may need homebrew versions for compatibility
+        "buildkit"           # Docker buildkit
+        "capstone"           # Disassembly framework
+        "flock"              # File locking utility
+        "pinentry-mac"       # macOS-specific pinentry
+        "nvm"                # Node Version Manager (better as homebrew)
+        "python-setuptools"  # Python build tools
+        
+        # Specialized tools not readily available in nix
+        "dbmate"             # Database migration tool
+        "eksctl"             # AWS EKS CLI
+        "geni"               # Network emulator
+        "kind"               # Kubernetes in Docker
+        "ledger"             # Command-line accounting
+        "lima"               # Linux VM manager
+        "md5sha1sum"         # macOS checksum utilities
+        "mongosh"            # MongoDB shell
+        "skaffold"           # Kubernetes dev tool
+        "thefuck"            # Command correction tool
+        "tlrc"               # tldr client
+        "wakatime-cli"       # Time tracking
+        "when"               # Calendar utility
+        
+        # RISC-V development tools
+        "riscv64-elf-binutils"
+        "riscv64-elf-gcc"
+        "riscv64-elf-gdb"
+        
+        # Low-level system libraries
         "libelf"
         "libmpdclient"
         "libslirp"
         "libssh"
-        "lima"
-        "make"
-        "md5sha1sum"
-        "mongosh"
-        "neovim"
-        "ninja"
-        "nushell"
-        "nvm"
-        "tree"
-        "pass"
-        "pinentry-mac"
-        "pipx"
-        "pnpm"
-        "postgresql@16"
-        "protobuf"
-        "python-setuptools"
-        "r"
-        "redis"
-        "ripgrep"
-        "riscv64-elf-binutils"
-        "riscv64-elf-gcc"
-        "riscv64-elf-gdb"
-        "skaffold"
-        "starship"
-        "terraform"
-        "texinfo"
-        "thefuck"
-        "tlrc"
-        "tmux"
-        "wakatime-cli"
-        "wget"
-        "when"
-        "yarn"
-        "yazi"
-        "zig"
-        "zlib"
-        "zoxide"
+        
+        # Custom taps and formulae (specialized tools)
         "felixkratz/formulae/sketchybar"
         "filosottile/musl-cross/musl-cross"
         "go-swagger/go-swagger/go-swagger"
@@ -165,7 +198,6 @@
         "riscv/riscv/riscv-tools"
         "tursodatabase/tap/turso"
         "withgraphite/tap/graphite"
-        "stow"
       ];
       homebrew.taps = [
         "felixkratz/formulae"
