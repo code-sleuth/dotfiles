@@ -297,6 +297,9 @@ source $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.z
 
 # use atuin for history
 source $HOME/.config/scripts/atuin.sh
+alias asr="atuin scripts run"
+alias as="aerospace"
+alias v="nvim"
 
 # ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#606090'
 # ZSH_AUTOSUGGEST_STRATEGY=(history completion)
