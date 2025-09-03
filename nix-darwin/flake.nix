@@ -49,10 +49,10 @@
 
       # Homebrew needs to be installed on its own!
       homebrew.enable = true;
+      homebrew.onActivation.cleanup = "zap";
       homebrew.casks = [
         "aerospace"
         "alacritty"
-        "betterdisplay"
         "docker-desktop"
         "font-hack-nerd-font"
         "font-jetbrains-mono-nerd-font"
