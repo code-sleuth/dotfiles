@@ -6,6 +6,20 @@ __pycache__/
 .hypothesis/
 .ruff_cache/
 .ropeproject/
+.DS_Store
+configstore
+expressvpn
+gh
+asciinema
+graphite
+jgit
+rstudio
+solana
+yarn
+zed/prompts
+zed/conversations
+
+
 
 # node modules
 node_modules
