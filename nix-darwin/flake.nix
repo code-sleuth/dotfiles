@@ -51,13 +51,8 @@
           pkgs.yazi
 
           # Programming languages and tools
-          pkgs.go
           pkgs.python313
-          pkgs.rustc
-          pkgs.cargo
-          pkgs.rustfmt
-          pkgs.clippy
-          pkgs.rust-analyzer
+          pkgs.rustup
 
           # Rust development tools
           pkgs.cargo-audit
@@ -75,7 +70,7 @@
           pkgs.cmake
           pkgs.ninja
           pkgs.gnumake
-          pkgs.gcc
+          # pkgs.gcc
           pkgs.binutils
 
           # System utilities
@@ -182,6 +177,7 @@
           echo "Warning: Raycast CLI not found at expected location"
         fi
       '';
+
       system.primaryUser = "code";
       nix.settings.experimental-features = "nix-command flakes";
       programs.zsh.enable = true;  # default shell on macos
@@ -274,6 +270,13 @@
         "libmpdclient"
         "libslirp"
         "libssh"
+        "llvm"
+        "gcc"
+
+        # Programming Languages
+        "go"
+        # "libpq"
+        # "libiconv"
 
         # Custom taps and formulae
         "felixkratz/formulae/sketchybar"
