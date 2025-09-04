@@ -217,6 +217,7 @@
         "stats"               # macOS system monitor (not in nix)
         "google-chrome"       # chrome
         "gimp@dev"            # GIMP development version
+        "ghostty"
       ];
       homebrew.brews = [
         # Libraries and low-level tools needed for system compatibility
