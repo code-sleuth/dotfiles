@@ -43,6 +43,7 @@
           # Development tools
           pkgs.neovim
           # pkgs.git-delta
+          pkgs.diff-so-fancy
           pkgs.lazygit
           pkgs.lazydocker
           pkgs.gh
@@ -204,6 +205,8 @@
         🦇🦇🦇🦇🦇🦇";
         screencapture.location = "~/Desktop/screenshots";
         screensaver.askForPasswordDelay = 10;
+        loginwindow.GuestEnabled = false;
+        NSGlobalDomain.AppleInterfaceStyle = "Dark";
       };
 
       # Homebrew needs to be installed on its own!
