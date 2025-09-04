@@ -1,11 +1,11 @@
 # By default Reload config with shft + cmd + ,
 config-file = themes/rosepine
-background = #000000
+#background = #000000
 background-opacity = 0.75
 background-blur-radius = 23
 
-font-family = JetBrainsMonoNL Nerd Font
-font-size = 20
+font-family = "JetBrainsMono Nerd Font"
+font-size = 50
 cursor-style = block
 cursor-style-blink = false
 cursor-invert-fg-bg = true
@@ -19,6 +19,7 @@ window-decoration = auto
 window-padding-x = 10
 window-padding-y = 10
 window-padding-balance = false
+window-inherit-font-size = true
 
 auto-update = check
 auto-update-channel = stable
