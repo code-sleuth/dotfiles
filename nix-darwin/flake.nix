@@ -13,7 +13,7 @@
 
   outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager }:
   let
-    configuration = { pkgs, ... }: {
+    configuration = { pkgs, config, ... }: {
       ids.gids.nixbld = 350;
       # List packages installed in system profile. To search by name, run:
       # $ nix-env -qaP | grep wget
@@ -25,7 +25,7 @@
           pkgs.sshs
           pkgs.glow
           pkgs.ffmpeg
-          
+
           # Shell and terminal tools
           pkgs.nushell
           pkgs.carapace
@@ -39,31 +39,44 @@
           pkgs.fzf
           pkgs.ripgrep
           pkgs.tree
-          
+
           # Development tools
           pkgs.neovim
-          pkgs.git-delta
+          # pkgs.git-delta
           pkgs.lazygit
           pkgs.lazydocker
           pkgs.gh
           pkgs.jq
           pkgs.yazi
-          
+
           # Programming languages and tools
           pkgs.go
           pkgs.python313
-          pkgs.nodejs
+          pkgs.rustc
+          pkgs.cargo
+          pkgs.rustfmt
+          pkgs.clippy
+          pkgs.rust-analyzer
+
+          # Rust development tools
+          pkgs.cargo-audit
+          pkgs.cargo-watch
+          pkgs.cargo-expand
+          pkgs.cargo-edit
+          pkgs.cargo-cache
+          pkgs.grcov
+
           pkgs.yarn
           pkgs.pnpm
           pkgs.zig
-          
+
           # Build tools
           pkgs.cmake
           pkgs.ninja
           pkgs.gnumake
           pkgs.gcc
           pkgs.binutils
-          
+
           # System utilities
           pkgs.coreutils
           pkgs.gawk
@@ -71,43 +84,110 @@
           pkgs.wget
           pkgs.imagemagick
           pkgs.stow
-          
+          pkgs.mkalias
+
           # Development services
           pkgs.redis
           pkgs.postgresql_16
           pkgs.protobuf
-          
+
           # Cloud and container tools
           pkgs.awscli
           pkgs.docker-compose
           pkgs.kubernetes-helm
-          pkgs.terraform
-          
+          # pkgs.terraform
+
           # Security and utilities
           pkgs.pass
           pkgs.pipx
-          
+
           # Entertainment
           pkgs.cmatrix
           pkgs.asciinema
-          
+
           # Fonts
           pkgs.nerd-fonts.hack
           pkgs.nerd-fonts.jetbrains-mono
-          
-          # GUI applications (can also be installed via homebrew casks if preferred)
+
+          # GUI applications (can also be installed via homebrew casks)
           pkgs.alacritty
-          pkgs.wezterm 
-          pkgs.ungoogled-chromium
-          pkgs.wireshark
+          pkgs.wezterm
+          pkgs.raycast
+          # pkgs.ungoogled-chromium
+          # pkgs.wireshark
           pkgs.zed-editor
         ];
+      system.activationScripts.applications.text = let
+        env = pkgs.buildEnv {
+          name = "system-applications";
+          paths = config.environment.systemPackages;
+          pathsToLink = "/Applications";
+        };
+      in
+      pkgs.lib.mkForce ''
+        echo "setting up /Applications..." >&2
+        rm -rf /Applications/Nix\ Apps
+        mkdir -p /Applications/Nix\ Apps
+        find ${env}/Applications -maxdepth 1 -type l -exec readlink '{}' + |
+        while read -r src; do
+          app_name=$(basename "$src")
+          echo "copying $src" >&2
+          ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
+        done
+      '';
+
+      system.activationScripts.fonts.text = ''
+        echo "setting up fonts..." >&2
+        rm -rf /Users/code/Library/Fonts/Nix\ Fonts
+        mkdir -p /Users/code/Library/Fonts/Nix\ Fonts
+
+        # Copy JetBrains Mono fonts
+        if [ -d ${pkgs.nerd-fonts.jetbrains-mono}/share/fonts ]; then
+          find ${pkgs.nerd-fonts.jetbrains-mono}/share/fonts -type f \( -name "*.ttf" -o -name "*.otf" \) | while read -r font; do
+            font_name=$(basename "$font")
+            echo "copying font $font_name" >&2
+            cp "$font" "/Users/code/Library/Fonts/Nix Fonts/$font_name"
+          done
+        fi
+
+        # Copy Hack fonts
+        if [ -d ${pkgs.nerd-fonts.hack}/share/fonts ]; then
+          find ${pkgs.nerd-fonts.hack}/share/fonts -type f \( -name "*.ttf" -o -name "*.otf" \) | while read -r font; do
+            font_name=$(basename "$font")
+            echo "copying font $font_name" >&2
+            cp "$font" "/Users/code/Library/Fonts/Nix Fonts/$font_name"
+          done
+        fi
+      '';
+
+      system.activationScripts.zed.text = ''
+        echo "setting up zed CLI..." >&2
+        mkdir -p /usr/local/bin
+        rm -f /usr/local/bin/zed
+        if [ -f ${pkgs.zed-editor}/Applications/Zed.app/Contents/MacOS/cli ]; then
+          ln -sf ${pkgs.zed-editor}/Applications/Zed.app/Contents/MacOS/cli /usr/local/bin/zed
+        else
+          echo "Warning: Zed CLI not found at expected location"
+        fi
+      '';
+
+      system.activationScripts.raycast.text = ''
+        echo "setting up raycast CLI..." >&2
+        mkdir -p /usr/local/bin
+        rm -f /usr/local/bin/raycast
+        if [ -f ${pkgs.raycast}/Applications/Raycast.app/Contents/MacOS/Raycast ]; then
+          ln -sf ${pkgs.raycast}/Applications/Raycast.app/Contents/MacOS/Raycast /usr/local/bin/raycast
+        else
+          echo "Warning: Raycast CLI not found at expected location"
+        fi
+      '';
       system.primaryUser = "code";
       nix.settings.experimental-features = "nix-command flakes";
       programs.zsh.enable = true;  # default shell on macos
       system.configurationRevision = self.rev or self.dirtyRev or null;
-      system.stateVersion = 4;
+      system.stateVersion = 6;
       nixpkgs.hostPlatform = "aarch64-darwin";
+      nixpkgs.config.allowUnfree = true;
       security.pam.services.sudo_local.touchIdAuth = true;
 
       users.users.code.home = "/Users/code";
@@ -118,7 +198,10 @@
         dock.mru-spaces = false;
         finder.AppleShowAllExtensions = true;
         finder.FXPreferredViewStyle = "clmv";
-        loginwindow.LoginwindowText = "batman 🦇";
+        loginwindow.LoginwindowText = "
+        🦇🦇🦇🦇🦇🦇
+           batman
+        🦇🦇🦇🦇🦇🦇";
         screencapture.location = "~/Desktop/screenshots";
         screensaver.askForPasswordDelay = 10;
       };
@@ -128,15 +211,16 @@
       homebrew.onActivation.cleanup = "zap";
       homebrew.casks = [
         # GUI apps that are better managed through homebrew or unavailable in nix
-        "docker-desktop"      # Proprietary Docker Desktop
+        "aerospace"           # Tiling window manager for macOS
+        "docker-desktop"      # Docker Desktop
         "miniconda"           # Conda environment management
         "rstudio"             # RStudio IDE (complex nix setup)
         "stats"               # macOS system monitor (not in nix)
-        "google-chrome"       # Proprietary browser
-        "gimp@dev"           # GIMP development version
+        "google-chrome"       # chrome
+        "gimp@dev"            # GIMP development version
       ];
       homebrew.brews = [
-        # Libraries and low-level tools that may be needed for system compatibility
+        # Libraries and low-level tools needed for system compatibility
         "libpng"
         "glib"
         "pixman"
@@ -152,15 +236,15 @@
         "jpeg-turbo"
         "zlib"
         "texinfo"
-        
+
         # Tools that may need homebrew versions for compatibility
         "buildkit"           # Docker buildkit
         "capstone"           # Disassembly framework
         "flock"              # File locking utility
         "pinentry-mac"       # macOS-specific pinentry
-        "nvm"                # Node Version Manager (better as homebrew)
+        "nvm"                # Node Version Manager
         "python-setuptools"  # Python build tools
-        
+
         # Specialized tools not readily available in nix
         "dbmate"             # Database migration tool
         "eksctl"             # AWS EKS CLI
@@ -175,19 +259,20 @@
         "tlrc"               # tldr client
         "wakatime-cli"       # Time tracking
         "when"               # Calendar utility
-        
+        "starship"           # Prompt
+
         # RISC-V development tools
         "riscv64-elf-binutils"
         "riscv64-elf-gcc"
         "riscv64-elf-gdb"
-        
+
         # Low-level system libraries
         "libelf"
         "libmpdclient"
         "libslirp"
         "libssh"
-        
-        # Custom taps and formulae (specialized tools)
+
+        # Custom taps and formulae
         "felixkratz/formulae/sketchybar"
         "filosottile/musl-cross/musl-cross"
         "go-swagger/go-swagger/go-swagger"
