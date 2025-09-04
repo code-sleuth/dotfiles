@@ -23,7 +23,7 @@ hide_when_typing = true
 [font]
 normal.family = "JetBrainsMono Nerd Font"
 
-size = 16
+size = 17
 
 [keyboard]
 bindings = [
