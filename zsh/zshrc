@@ -387,3 +387,6 @@ export PATH="$PATH:/Users/code/.local/bin"
 
 # bun completions
 [ -s "/Users/code/.bun/_bun" ] && source "/Users/code/.bun/_bun"
+
+# NIX
+export PATH="/run/current-system/sw/bin:$PATH"
