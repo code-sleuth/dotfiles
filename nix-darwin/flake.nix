@@ -273,6 +273,7 @@
         "libssh"
         "llvm"
         "gcc"
+        "wasm-pack"
 
         # Programming Languages
         "go"
