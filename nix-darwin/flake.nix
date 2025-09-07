@@ -274,11 +274,15 @@
         "llvm"
         "gcc"
         "wasm-pack"
+        "trunk" # WASM builder & bundler crate
 
         # Programming Languages
         "go"
         # "libpq"
         # "libiconv"
+
+        # DevOps tools
+        "opentofu"
 
         # Custom taps and formulae
         "felixkratz/formulae/sketchybar"
