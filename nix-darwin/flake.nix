@@ -65,6 +65,7 @@
           pkgs.yarn
           pkgs.pnpm
           pkgs.zig
+          pkgs.nixd # Nix language server
 
           # Build tools
           pkgs.cmake
@@ -207,7 +208,11 @@
 
       # Homebrew needs to be installed on its own!
       homebrew.enable = true;
-      homebrew.onActivation.cleanup = "zap";
+      homebrew.onActivation = {
+        cleanup = "zap";
+        autoUpdate = true;
+        upgrade = true;
+      };
       homebrew.casks = [
         # GUI apps that are better managed through homebrew or unavailable in nix
         "aerospace"           # Tiling window manager for macOS
