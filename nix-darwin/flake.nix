@@ -14,6 +14,29 @@
   outputs = { self, nix-darwin, nixpkgs, home-manager }:
   let
     system = "aarch64-darwin";
+    
+    # Helper functions for activation scripts
+    mkCliScript = name: app: path: ''
+      echo "setting up ${name} CLI..." >&2
+      mkdir -p /usr/local/bin
+      rm -f /usr/local/bin/${name}
+      if [ -f ${app}${path} ]; then
+        ln -sf ${app}${path} /usr/local/bin/${name}
+      else
+        echo "Warning: ${name} CLI not found at expected location"
+      fi
+    '';
+    
+    mkFontCopy = font: ''
+      if [ -d ${font}/share/fonts ]; then
+        find ${font}/share/fonts -type f \( -name "*.ttf" -o -name "*.otf" \) | while read -r font_file; do
+          font_name=$(basename "$font_file")
+          echo "copying font $font_name" >&2
+          cp "$font_file" "/Users/code/Library/Fonts/Nix Fonts/$font_name"
+        done
+      fi
+    '';
+    
     configuration = { pkgs, config, ... }: {
       ids.gids.nixbld = 350;
       # List packages installed in system profile. To search by name, run:
@@ -115,73 +138,45 @@
           # pkgs.wireshark
           pkgs.zed-editor
         ];
-      system.activationScripts.applications.text = let
-        env = pkgs.buildEnv {
-          name = "system-applications";
-          paths = config.environment.systemPackages;
-          pathsToLink = "/Applications";
-        };
-      in
-      pkgs.lib.mkForce ''
-        echo "setting up /Applications..." >&2
-        rm -rf /Applications/Nix\ Apps
-        mkdir -p /Applications/Nix\ Apps
-        find ${env}/Applications -maxdepth 1 -type l -exec readlink '{}' + |
-        while read -r src; do
-          app_name=$(basename "$src")
-          echo "copying $src" >&2
-          ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
-        done
-      '';
-
-      system.activationScripts.fonts.text = ''
-        echo "setting up fonts..." >&2
-        rm -rf /Users/code/Library/Fonts/Nix\ Fonts
-        mkdir -p /Users/code/Library/Fonts/Nix\ Fonts
-
-        # Copy JetBrains Mono fonts
-        if [ -d ${pkgs.nerd-fonts.jetbrains-mono}/share/fonts ]; then
-          find ${pkgs.nerd-fonts.jetbrains-mono}/share/fonts -type f \( -name "*.ttf" -o -name "*.otf" \) | while read -r font; do
-            font_name=$(basename "$font")
-            echo "copying font $font_name" >&2
-            cp "$font" "/Users/code/Library/Fonts/Nix Fonts/$font_name"
+      system.activationScripts = {
+        applications.text = let
+          env = pkgs.buildEnv {
+            name = "system-applications";
+            paths = config.environment.systemPackages;
+            pathsToLink = "/Applications";
+          };
+        in
+        pkgs.lib.mkForce ''
+          echo "setting up /Applications..." >&2
+          rm -rf /Applications/Nix\ Apps
+          mkdir -p /Applications/Nix\ Apps
+          find ${env}/Applications -maxdepth 1 -type l -exec readlink '{}' + |
+          while read -r src; do
+            app_name=$(basename "$src")
+            echo "copying $src" >&2
+            ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
           done
-        fi
+        '';
 
-        # Copy Hack fonts
-        if [ -d ${pkgs.nerd-fonts.hack}/share/fonts ]; then
-          find ${pkgs.nerd-fonts.hack}/share/fonts -type f \( -name "*.ttf" -o -name "*.otf" \) | while read -r font; do
-            font_name=$(basename "$font")
-            echo "copying font $font_name" >&2
-            cp "$font" "/Users/code/Library/Fonts/Nix Fonts/$font_name"
-          done
-        fi
-      '';
+        fonts.text = ''
+          echo "setting up fonts..." >&2
+          rm -rf /Users/code/Library/Fonts/Nix\ Fonts
+          mkdir -p /Users/code/Library/Fonts/Nix\ Fonts
 
-      system.activationScripts.zed.text = ''
-        echo "setting up zed CLI..." >&2
-        mkdir -p /usr/local/bin
-        rm -f /usr/local/bin/zed
-        if [ -f ${pkgs.zed-editor}/Applications/Zed.app/Contents/MacOS/cli ]; then
-          ln -sf ${pkgs.zed-editor}/Applications/Zed.app/Contents/MacOS/cli /usr/local/bin/zed
-        else
-          echo "Warning: Zed CLI not found at expected location"
-        fi
-      '';
+          ${mkFontCopy pkgs.nerd-fonts.jetbrains-mono}
+          ${mkFontCopy pkgs.nerd-fonts.hack}
+        '';
 
-      system.activationScripts.raycast.text = ''
-        echo "setting up raycast CLI..." >&2
-        mkdir -p /usr/local/bin
-        rm -f /usr/local/bin/raycast
-        if [ -f ${pkgs.raycast}/Applications/Raycast.app/Contents/MacOS/Raycast ]; then
-          ln -sf ${pkgs.raycast}/Applications/Raycast.app/Contents/MacOS/Raycast /usr/local/bin/raycast
-        else
-          echo "Warning: Raycast CLI not found at expected location"
-        fi
-      '';
+        zed.text = mkCliScript "zed" pkgs.zed-editor "/Applications/Zed.app/Contents/MacOS/cli";
+
+        raycast.text = mkCliScript "raycast" pkgs.raycast "/Applications/Raycast.app/Contents/MacOS/Raycast";
+      };
 
       system.primaryUser = "code";
-      nix.settings.experimental-features = "nix-command flakes";
+      nix.settings = {
+        experimental-features = "nix-command flakes";
+        trusted-users = [ "root" "code" ];
+      };
       programs.zsh.enable = true;  # default shell on macos
       system.stateVersion = 6;
       security.pam.services.sudo_local.touchIdAuth = true;
