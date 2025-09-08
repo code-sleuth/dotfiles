@@ -1,7 +1,7 @@
 # home.nix
 # home-manager switch
 
-{ config, pkgs, ... }:
+# { config, pkgs, ... }:
 
 {
   home.username = "code";
