@@ -11,8 +11,9 @@
     };
   };
 
-  outputs = { self, nix-darwin, home-manager }:
+  outputs = { self, nix-darwin, nixpkgs, home-manager }:
   let
+    system = "aarch64-darwin";
     configuration = { pkgs, config, ... }: {
       ids.gids.nixbld = 350;
       # List packages installed in system profile. To search by name, run:
@@ -182,10 +183,7 @@
       system.primaryUser = "code";
       nix.settings.experimental-features = "nix-command flakes";
       programs.zsh.enable = true;  # default shell on macos
-      system.configurationRevision = self.rev or self.dirtyRev or null;
       system.stateVersion = 6;
-      nixpkgs.hostPlatform = "aarch64-darwin";
-      nixpkgs.config.allowUnfree = true;
       security.pam.services.sudo_local.touchIdAuth = true;
 
       users.users.code.home = "/Users/code";
@@ -318,13 +316,22 @@
   in
   {
     darwinConfigurations."Ibrahims-Thanos" = nix-darwin.lib.darwinSystem {
-      system = "aarch64-darwin";
+      system = system;
+      pkgs = import nixpkgs {
+        system = system;
+        config = {
+          allowUnfree = true;
+        };
+      };
       modules = [
         configuration
         home-manager.darwinModules.home-manager {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.users.code = import ./home.nix;
+        }
+        {
+          system.configurationRevision = self.rev or self.dirtyRev or null;
         }
       ];
     };
