@@ -11,7 +11,7 @@
     };
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager }:
+  outputs = { self, nix-darwin, home-manager }:
   let
     configuration = { pkgs, config, ... }: {
       ids.gids.nixbld = 350;
