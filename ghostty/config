@@ -5,6 +5,7 @@ background-opacity = 0.75
 background-blur-radius = 23
 
 font-family = "JetBrainsMono Nerd Font"
+font-thicken = true
 font-size = 18
 cursor-style = block
 cursor-style-blink = false
