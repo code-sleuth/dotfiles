@@ -53,6 +53,14 @@
         },
         "path": " /run/current-system/sw/bin/nixd"
       }
+    },
+    "nil": {
+      "settings": {
+        "diagnostics": {
+          "ignored": ["unused_binding"]
+        },
+        "path": "/run/current-system/sw/bin/nil"
+      }
     }
   }
 }
