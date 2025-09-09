@@ -18,13 +18,15 @@
   };
 
   home.sessionVariables = {
+    EDITOR = "zed";
+    VISUAL = "zed";
   };
 
   home.sessionPath = [
     "/run/current-system/sw/bin"
     "$HOME/.nix-profile/bin"
   ];
-  programs.home-manager.enable = false;  # disable home manager
+  programs.home-manager.enable = false; # disable home manager
   # programs.zsh = {
   #   enable = true;
   #   initExtra = ''

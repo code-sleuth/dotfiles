@@ -82,7 +82,7 @@
             pkgs.yazi
 
             # Programming languages and tools
-            pkgs.python313
+            # pkgs.python313
             pkgs.rustup
 
             # Rust development tools
@@ -103,7 +103,7 @@
             pkgs.cmake
             pkgs.ninja
             pkgs.gnumake
-            # pkgs.gcc
+            # pkgs.gcc # conflicts with macos gcc from `xcode-select --install`
             pkgs.binutils
 
             # System utilities
@@ -117,13 +117,13 @@
 
             # Development services
             pkgs.redis
-            pkgs.postgresql_16
+            # pkgs.postgresql_16
             pkgs.protobuf
 
             # Cloud and container tools
             pkgs.awscli
             pkgs.docker-compose
-            pkgs.kubernetes-helm
+            # pkgs.kubernetes-helm
             # pkgs.terraform
 
             # Security and utilities
@@ -145,6 +145,16 @@
             # pkgs.ungoogled-chromium
             # pkgs.wireshark
             pkgs.zed-editor
+
+            # podman
+            pkgs.podman
+            pkgs.podman-desktop
+            pkgs.podman-compose
+
+            #k8s
+            pkgs.kubectl
+            pkgs.kubernetes-helm
+            pkgs.kind
           ];
           system.activationScripts = {
             applications.text =
@@ -229,7 +239,6 @@
             "rstudio" # RStudio IDE (complex nix setup)
             "stats" # macOS system monitor (not in nix)
             "google-chrome" # chrome
-            "gimp@dev" # GIMP development version
             "ghostty"
           ];
           homebrew.brews = [
@@ -262,7 +271,6 @@
             "dbmate" # Database migration tool
             "eksctl" # AWS EKS CLI
             "geni" # Network emulator
-            "kind" # Kubernetes in Docker
             "ledger" # Command-line accounting
             "lima" # Linux VM manager
             "md5sha1sum" # macOS checksum utilities
@@ -296,6 +304,7 @@
 
             # DevOps tools
             "opentofu"
+            "terraform"
 
             # Custom taps and formulae
             "felixkratz/formulae/sketchybar"
@@ -307,12 +316,11 @@
             "riscv/riscv/riscv-gnu-toolchain"
             "riscv/riscv/riscv-tools"
             "tursodatabase/tap/turso"
-            "withgraphite/tap/graphite"
           ];
           homebrew.taps = [
             "felixkratz/formulae"
             "filosottile/musl-cross"
-            "go-swagger/go-swagger"
+            # "go-swagger/go-swagger"
             "homebrew/services"
             "libsql/sqld"
             "messense/macos-cross-toolchains"
@@ -320,7 +328,6 @@
             "oven-sh/bun"
             "riscv/riscv"
             "tursodatabase/tap"
-            "withgraphite/tap"
           ];
         };
     in
