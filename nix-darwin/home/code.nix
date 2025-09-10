@@ -1,0 +1,128 @@
+# Enhanced Home Manager configuration for user "code"
+# Inspired by ironicbadger's configuration structure
+{
+  config,
+  inputs,
+  pkgs,
+  lib,
+  ...
+}:
+{
+  home.stateVersion = "23.05";
+
+  # User-specific packages that shouldn't be available system-wide
+  home.packages = with pkgs; [
+    # Add any user-specific packages here
+  ];
+
+  # Dotfile management through Home Manager
+  home.file = {
+    ".zshrc" = {
+      source = ../../zsh/zshrc;
+      enable = true;
+    };
+    ".zprofile" = {
+      source = ../../zsh/zprofile;
+      enable = true;
+    };
+    ".config/skhd" = {
+      source = ../../skhd;
+      enable = false;
+    };
+    ".config/nvim" = {
+      source = ../../nvim;
+      enable = true;
+    };
+    ".config/nix" = {
+      source = ../../nix;
+      enable = true;
+    };
+    ".config/nix-darwin" = {
+      source = ../../nix-darwin;
+      enable = true;
+    };
+    ".config/tmux" = {
+      source = ../../tmux;
+      enable = true;
+    };
+    ".config/ghostty" = {
+      source = ../../ghostty;
+      enable = true;
+    };
+    ".config/aerospace" = {
+      source = ../../aerospace;
+      enable = true;
+    };
+    ".config/sketchybar" = {
+      source = ../../sketchybar;
+      enable = true;
+    };
+    ".config/nushell" = {
+      source = ../../nushell;
+      enable = true;
+    };
+    ".config/git" = {
+      source = ../../git;
+      enable = true;
+    };
+    ".config/bat" = {
+      source = ../../bat;
+      enable = true;
+    };
+    ".config/atuin" = {
+      source = ../../atuin;
+      enable = true;
+    };
+    ".config/ledger" = {
+      source = ../../ledger;
+      enable = true;
+    };
+    ".lesskey" = {
+      source = ../../less;
+      enable = true;
+    };
+    ".config/neofetch" = {
+      source = ../../neofetch;
+      enable = true;
+    };
+    ".config/thefuck" = {
+      source = ../../thefuck;
+      enable = false;
+    };
+    ".config/alacritty" = {
+      source = ../../alacritty;
+      enable = true;
+    };
+    ".config/zed/settings.json" = {
+      source = ../../zed/settings.json;
+      enable = true;
+    };
+    ".config/wezterm" = {
+      source = ../../wezterm;
+      enable = true;
+    };
+    ".config/starship.toml" = {
+      source = ../../starship/starship.toml;
+      enable = true;
+    };
+    ".config/scripts" = {
+      source = ../../scripts;
+      enable = true;
+    };
+  };
+
+  # Environment variables
+  home.sessionVariables = {
+    EDITOR = "zed";
+    VISUAL = "zed";
+  };
+
+  # Session PATH additions
+  home.sessionPath = [
+    "/run/current-system/sw/bin"
+    "$HOME/.nix-profile/bin"
+  ];
+
+  # Enable Home Manager programs
+  programs.home-manager.enable = true;
+}

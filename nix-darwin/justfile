@@ -1,0 +1,87 @@
+# Build the system config and switch to it when running `just` with no args
+default: switch
+
+hostname := `hostname | cut -d "." -f 1`
+
+### macOS Darwin
+# Build the nix-darwin system configuration without switching to it
+[macos]
+build target_host=hostname flags="":
+  @echo "Building nix-darwin config for {{target_host}}..."
+  nix --extra-experimental-features 'nix-command flakes' build ".#darwinConfigurations.{{target_host}}.system" {{flags}}
+
+# Build the nix-darwin config with the --show-trace flag set
+[macos]
+trace target_host=hostname: (build target_host "--show-trace")
+
+# Build the nix-darwin configuration and switch to it
+[macos]
+switch target_host=hostname: (build target_host)
+  @echo "Switching to new config for {{target_host}}..."
+  sudo ./result/sw/bin/darwin-rebuild switch --flake ".#{{target_host}}"
+
+# Alternative switch method using system darwin-rebuild
+[macos]
+switch-system target_host=hostname:
+  @echo "Switching to new config for {{target_host}} using system darwin-rebuild..."
+  sudo darwin-rebuild switch --flake ".#{{target_host}}"
+
+# Check what would change without applying (dry run)
+[macos]
+dry-run target_host=hostname:
+  @echo "Dry run for {{target_host}}..."
+  sudo darwin-rebuild switch --flake ".#{{target_host}}" --dry-run
+
+# Update flake inputs to their latest revisions
+update:
+  @echo "Updating flake inputs..."
+  nix flake update
+
+# Show flake info
+info:
+  @echo "Flake info:"
+  nix flake show
+
+# Check flake for issues
+check:
+  @echo "Checking flake..."
+  nix flake check
+
+# Format nix files in the repository
+fmt:
+  @echo "Formatting nix files..."
+  nixpkgs-fmt .
+
+# Garbage collect old OS generations and remove stale packages from the nix store
+gc:
+  @echo "Running garbage collection..."
+  nix-collect-garbage -d
+  sudo nix-collect-garbage -d --delete-older-than 7d
+  nix-store --gc
+
+# List system generations
+[macos]
+generations:
+  @echo "System generations:"
+  sudo darwin-rebuild --list-generations
+
+# Show current system generation
+[macos]
+current-gen:
+  @echo "Current system generation:"
+  sudo darwin-rebuild --list-generations | grep current
+
+# Rollback to previous generation
+[macos]
+rollback:
+  @echo "Rolling back to previous generation..."
+  sudo darwin-rebuild rollback
+
+# Clean up result symlinks
+clean:
+  @echo "Cleaning up result symlinks..."
+  rm -f result result-*
+
+# Show this help
+help:
+  @just --list
