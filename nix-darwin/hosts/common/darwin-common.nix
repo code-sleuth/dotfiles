@@ -133,6 +133,14 @@ in
       "stats" # macOS system monitor (not in nix)
       "google-chrome" # chrome
       "ghostty"
+      "zen" # Zen Browser
+      "slack" # Team communication
+      "discord" # Chat and voice communication
+      "qobuz" # Music streaming
+      "spotify" # Music streaming
+      "notion" # Note-taking and productivity
+      "notion-calendar" # Calendar app
+      "obsidian" # Knowledge management
     ];
 
     brews = [
