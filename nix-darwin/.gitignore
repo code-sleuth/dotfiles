@@ -1,0 +1,59 @@
+# Python specific
+.venv/
+.mypy_cache/
+.pytest_cache/
+__pycache__/
+.hypothesis/
+.ruff_cache/
+.ropeproject/
+
+# macOS
+.DS_Store
+
+# App-specific configs that shouldn't be managed
+configstore/
+expressvpn/
+gh/
+asciinema/
+graphite/
+jgit/
+rstudio/
+solana/
+yarn/
+
+# Zed AI data
+zed/prompts/
+zed/conversations/
+
+# Temporary/personal files
+plans/
+containers/
+
+# Node modules
+node_modules/
+
+# Secrets
+.env
+*.env
+
+# Claude
+.claude/
+**/.claude/settings.local.json
+CLAUDE.md
+
+# Rust specific
+target/
+
+# Zig specific
+.zig-cache/
+zig-out/
+
+# Home Manager backups
+*.backup
+
+# Build artifacts
+result
+result-*
+
+# Nix build outputs
+.direnv/
