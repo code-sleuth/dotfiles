@@ -31,6 +31,7 @@ in
     fzf
     ripgrep
     tree
+    btop
 
     # Development tools
     neovim
@@ -64,6 +65,7 @@ in
     ninja
     gnumake
     binutils
+    act
 
     # System utilities
     coreutils
@@ -109,5 +111,15 @@ in
     kubectl
     kubernetes-helm
     kind
+
+    # Build automation
+    ansible
+
+    # utils
+    watch
+    qemu
+    ipmitool
+    nmap
+    git-crypt # encrypt git files
   ];
 }
