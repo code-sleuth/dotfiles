@@ -98,23 +98,6 @@ in
     '';
   };
 
-  # macOS system defaults
-  system.defaults = {
-    dock.autohide = true;
-    dock.mru-spaces = false;
-    finder.AppleShowAllExtensions = true;
-    finder.FXPreferredViewStyle = "clmv";
-    loginwindow.LoginwindowText = "
-            🦇🦇🦇🦇🦇🦇
-              batman
-            🦇🦇🦇🦇🦇🦇
-            ";
-    screencapture.location = "~/Desktop/screenshots";
-    screensaver.askForPasswordDelay = 10;
-    loginwindow.GuestEnabled = false;
-    NSGlobalDomain.AppleInterfaceStyle = "Dark";
-  };
-
   # Homebrew configuration
   homebrew = {
     enable = true;
@@ -182,7 +165,6 @@ in
       "tlrc" # tldr client
       "wakatime-cli" # Time tracking
       "when" # Calendar utility
-      "starship" # Prompt
 
       # RISC-V development tools
       "riscv64-elf-binutils"
@@ -200,7 +182,7 @@ in
       "trunk" # WASM builder & bundler crate
 
       # Programming Languages
-      "go"
+      # "go"
 
       # DevOps tools
       "opentofu"
@@ -229,5 +211,105 @@ in
       "riscv/riscv"
       "tursodatabase/tap"
     ];
+  };
+
+  # macOS system defaults
+  system.defaults = {
+    NSGlobalDomain.AppleShowAllExtensions = true;
+    NSGlobalDomain.AppleShowScrollBars = "Always";
+    NSGlobalDomain.NSUseAnimatedFocusRing = false;
+    NSGlobalDomain.NSNavPanelExpandedStateForSaveMode = true;
+    NSGlobalDomain.NSNavPanelExpandedStateForSaveMode2 = true;
+    NSGlobalDomain.PMPrintingExpandedStateForPrint = true;
+    NSGlobalDomain.PMPrintingExpandedStateForPrint2 = true;
+    NSGlobalDomain.NSDocumentSaveNewDocumentsToCloud = false;
+    NSGlobalDomain.ApplePressAndHoldEnabled = false;
+    NSGlobalDomain.InitialKeyRepeat = 25;
+    NSGlobalDomain.KeyRepeat = 2;
+    NSGlobalDomain."com.apple.mouse.tapBehavior" = 1;
+    NSGlobalDomain.NSWindowShouldDragOnGesture = true;
+    NSGlobalDomain.NSAutomaticSpellingCorrectionEnabled = false;
+    LaunchServices.LSQuarantine = false; # disables "Are you sure?" for new apps
+    loginwindow.GuestEnabled = false;
+    finder.FXPreferredViewStyle = "Nlsv"; # or clmv
+    loginwindow.LoginwindowText = "
+            🦇🦇🦇🦇🦇🦇
+              batman
+            🦇🦇🦇🦇🦇🦇
+            ";
+    screencapture.location = "~/Desktop/screenshots";
+    screensaver.askForPasswordDelay = 10;
+    NSGlobalDomain.AppleInterfaceStyle = "Dark";
+    dock = {
+      autohide = true;
+      launchanim = false;
+      static-only = false;
+      show-recents = false;
+      show-process-indicators = true;
+      orientation = "bottom";
+      tilesize = 36;
+      minimize-to-application = true;
+      mineffect = "scale";
+      # enable-window-tool = false;
+    };
+  };
+
+  system.defaults.CustomUserPreferences = {
+    "com.apple.finder" = {
+      ShowExternalHardDrivesOnDesktop = true;
+      ShowHardDrivesOnDesktop = false;
+      ShowMountedServersOnDesktop = false;
+      ShowRemovableMediaOnDesktop = true;
+      _FXSortFoldersFirst = true;
+      # When performing a search, search the current folder by default
+      FXDefaultSearchScope = "SCcf";
+      DisableAllAnimations = true;
+      NewWindowTarget = "PfDe";
+      NewWindowTargetPath = "file://$\{HOME\}/Desktop/";
+      AppleShowAllExtensions = true;
+      FXEnableExtensionChangeWarning = false;
+      ShowStatusBar = true;
+      ShowPathbar = true;
+      WarnOnEmptyTrash = false;
+    };
+    "com.apple.desktopservices" = {
+      # Avoid creating .DS_Store files on network or USB volumes
+      DSDontWriteNetworkStores = true;
+      DSDontWriteUSBStores = true;
+    };
+    "com.apple.HIToolbox" = {
+      AppleKeyboardUIMode = 3; # Enable full keyboard access
+    };
+
+    # Disable Caps Lock for all keyboards
+    "com.apple.keyboard.fnState" = {
+      "3" = 0; # Disable Caps Lock for USB keyboards
+    };
+    "com.apple.ActivityMonitor" = {
+      OpenMainWindow = true;
+      IconType = 5;
+      SortColumn = "CPUUsage";
+      SortDirection = 0;
+    };
+    # "com.apple.Safari" = {
+    #   # Privacy: don’t send search queries to Apple
+    #   UniversalSearchEnabled = false;
+    #   SuppressSearchSuggestions = true;
+    # };
+    "com.apple.AdLib" = {
+      allowApplePersonalizedAdvertising = false;
+    };
+    "com.apple.SoftwareUpdate" = {
+      AutomaticCheckEnabled = true;
+      # Check for software updates daily, not just once per week
+      ScheduleFrequency = 1;
+      # Download newly available updates in background
+      AutomaticDownload = 1;
+      # Install System data files & security updates
+      CriticalUpdateInstall = 1;
+    };
+    "com.apple.TimeMachine".DoNotOfferNewDisksForBackup = true;
+    # Prevent Photos from opening automatically when devices are plugged in
+    "com.apple.ImageCapture".disableHotPlug = true;
   };
 }

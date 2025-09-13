@@ -45,6 +45,7 @@ in
 
     # Programming languages and tools
     rustup
+    go
 
     # Rust development tools
     cargo-audit
