@@ -276,10 +276,6 @@ _fzf_comprun() {
   esac
 }
 
-# thefuck alias
-eval $(thefuck --alias)
-eval $(thefuck --alias fk)
-
 # Plugin: zoxide ---- Zoxide (better cd) ----
 export _ZO_FZF_OPTS="$FZF_DEFAULT_OPTS --no-tac --select-1 --exit-0"
 # eval "$(zoxide init zsh --no-cmd)"
