@@ -110,6 +110,7 @@ in
     pass
     gnupg
     pinentry_mac
+    openssl
 
     # System Monitoring & Analysis
     btop

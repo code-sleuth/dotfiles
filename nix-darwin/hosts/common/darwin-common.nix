@@ -101,7 +101,6 @@ in
       "aerospace" # Tiling window manager for macOS
       "docker-desktop" # Docker Desktop
       "miniconda" # Conda environment management
-      # "rstudio" # RStudio IDE (complex nix setup)
       "stats" # macOS system monitor (not in nix)
       "google-chrome" # chrome
       "ghostty"
