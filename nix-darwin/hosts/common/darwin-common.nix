@@ -75,17 +75,6 @@ in
       done
     '';
 
-    zed.text = ''
-      echo "setting up zed CLI..." >&2
-      mkdir -p /usr/local/bin
-      rm -f /usr/local/bin/zed
-      if [ -f ${pkgs.zed-editor}/Applications/Zed.app/Contents/MacOS/cli ]; then
-        ln -sf ${pkgs.zed-editor}/Applications/Zed.app/Contents/MacOS/cli /usr/local/bin/zed
-      else
-        echo "Warning: zed CLI not found at expected location"
-      fi
-    '';
-
     raycast.text = ''
       echo "setting up raycast CLI..." >&2
       mkdir -p /usr/local/bin
@@ -124,6 +113,7 @@ in
       "notion" # Note-taking and productivity
       "notion-calendar" # Calendar app
       "obsidian" # Knowledge management
+      "plex" # media server
     ];
 
     brews = [
@@ -145,26 +135,11 @@ in
       "texinfo"
 
       # Tools that may need homebrew versions for compatibility
-      "buildkit" # Docker buildkit
-      "capstone" # Disassembly framework
-      "flock" # File locking utility
-      "pinentry-mac" # macOS-specific pinentry
       "nvm" # Node Version Manager
       "python-setuptools" # Python build tools
 
       # Specialized tools not readily available in nix
-      "dbmate" # Database migration tool
-      "eksctl" # AWS EKS CLI
       "geni" # Network emulator
-      "ledger" # Command-line accounting
-      "lima" # Linux VM manager
-      "md5sha1sum" # macOS checksum utilities
-      # "mongosh" # MongoDB shell
-      "skaffold" # Kubernetes dev tool
-      "thefuck" # Command correction tool
-      "tlrc" # tldr client
-      "wakatime-cli" # Time tracking
-      "when" # Calendar utility
 
       # RISC-V development tools
       "riscv64-elf-binutils"
@@ -178,15 +153,6 @@ in
       "libssh"
       "llvm"
       "gcc"
-      "wasm-pack"
-      "trunk" # WASM builder & bundler crate
-
-      # Programming Languages
-      # "go"
-
-      # DevOps tools
-      "opentofu"
-      "terraform"
 
       # Custom taps and formulae
       "felixkratz/formulae/sketchybar"
@@ -194,7 +160,6 @@ in
       "go-swagger/go-swagger/go-swagger"
       "messense/macos-cross-toolchains/aarch64-unknown-linux-gnu"
       "messense/macos-cross-toolchains/x86_64-unknown-linux-gnu"
-      "oven-sh/bun/bun"
       "riscv/riscv/riscv-gnu-toolchain"
       "riscv/riscv/riscv-tools"
       "tursodatabase/tap/turso"
@@ -207,7 +172,6 @@ in
       "libsql/sqld"
       "messense/macos-cross-toolchains"
       "nikitabobko/tap"
-      "oven-sh/bun"
       "riscv/riscv"
       "tursodatabase/tap"
     ];
@@ -281,10 +245,6 @@ in
       AppleKeyboardUIMode = 3; # Enable full keyboard access
     };
 
-    # Disable Caps Lock for all keyboards
-    "com.apple.keyboard.fnState" = {
-      "3" = 0; # Disable Caps Lock for USB keyboards
-    };
     "com.apple.ActivityMonitor" = {
       OpenMainWindow = true;
       IconType = 5;

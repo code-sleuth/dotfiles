@@ -11,43 +11,59 @@ in
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-    # Core utilities
-    vim
+    # Core System Utilities
+    coreutils
+    gawk
+    gnused
+    wget
+    watch
+    flock
     direnv
     sshs
-    glow
-    ffmpeg
 
-    # Shell and terminal tools
+    # Shell & Terminal Environment
     nushell
     carapace
     starship
     atuin
     zoxide
     tmux
+
+    # Text Processing & Search
     bat
     eza
     fd
     fzf
     ripgrep
     tree
-    btop
-
-    # Development tools
-    neovim
-    diff-so-fancy
-    lazygit
-    lazydocker
-    gh
     jq
-    yazi
-    just
 
-    # Programming languages and tools
+    # Development Editors & IDEs
+    vim
+    neovim
+    zed-editor
+    # Create a wrapper to make zed CLI available in system PATH
+    (pkgs.writeShellScriptBin "zed" ''
+      exec ${pkgs.zed-editor}/Applications/Zed.app/Contents/MacOS/cli "$@"
+    '')
+
+    # Version Control & Collaboration
+    lazygit
+    gh
+    diff-so-fancy
+    git-crypt
+
+    # Programming Languages & Runtimes
     rustup
     go
+    zig
+    bun
+    yarn
+    pnpm
+    nixd # Nix language server
+    nil # Nix language server
 
-    # Rust development tools
+    # Rust Development Tools
     cargo-audit
     cargo-watch
     cargo-expand
@@ -55,72 +71,88 @@ in
     cargo-cache
     grcov
 
-    yarn
-    pnpm
-    zig
-    nixd # Nix language server
-    nil # Nix language server
-
-    # Build tools
+    # Build Systems & Compilation
     cmake
     ninja
     gnumake
     binutils
     act
 
-    # System utilities
-    coreutils
-    gawk
-    gnused
-    wget
-    imagemagick
-    stow
-    mkalias
+    # Container & Virtualization
+    podman
+    podman-desktop
+    podman-compose
+    docker-compose
+    lima
+    qemu
 
-    # Development services
+    # Kubernetes & Orchestration
+    kubectl
+    kubernetes-helm
+    kind
+
+    # Cloud & Infrastructure
+    awscli
+    eksctl
+
+    # DevOps & Automation
+    opentofu
+    terraform
+    ansible
+    buildkit
+
+    # Development Services
     redis
     protobuf
+    jellyfin
 
-    # Cloud and container tools
-    awscli
-    docker-compose
-
-    # Security and utilities
+    # Security & Cryptography
     pass
+    gnupg
+    pinentry_mac
+
+    # System Monitoring & Analysis
+    btop
+    nmap
+    ipmitool
+    capstone
+
+    # Media & Content Processing
+    ffmpeg
+    imagemagick
+    asciinema
+
+    # Documentation & Reference
+    glow
+    tlrc
+
+    # Productivity & Utilities
+    just
+    yazi
+    stow
+    mkalias
+    ledger
+    wakatime-cli
+    when
     pipx
 
-    # Entertainment
-    cmatrix
-    asciinema
+    # Web Assembly (WASM)
+    wasm-pack
+    trunk
+
+    # Database Tools
+    dbmate
+
+    # GUI Applications
+    alacritty
+    wezterm
+    raycast
 
     # Fonts
     nerd-fonts.hack
     nerd-fonts.jetbrains-mono
 
-    # GUI applications (can also be installed via homebrew casks)
-    alacritty
-    wezterm
-    raycast
-    zed-editor
-
-    # Container tools
-    podman
-    podman-desktop
-    podman-compose
-
-    # Kubernetes tools
-    kubectl
-    kubernetes-helm
-    kind
-
-    # Build automation
-    ansible
-
-    # utils
-    watch
-    qemu
-    ipmitool
-    nmap
-    git-crypt # encrypt git files
+    # Fun & Entertainment
+    cmatrix
   ];
 }
