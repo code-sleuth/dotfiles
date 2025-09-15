@@ -1,13 +1,32 @@
 return {
+    -- Disable rust-analyzer in lspconfig to prevent conflicts with rustaceanvim
+    {
+        "neovim/nvim-lspconfig",
+        opts = function(_, opts)
+            opts.servers = opts.servers or {}
+            -- Explicitly disable rust_analyzer
+            opts.servers.rust_analyzer = false
+            return opts
+        end,
+    },
+
     -- Rust development with debugging support
     {
         'mrcjkb/rustaceanvim',
-        version = '^5',
-        lazy = false,
-        ft = "rust",
+        version = '^6',
+        lazy = false, -- This plugin is already lazy
         init = function()
+            -- Prevent other plugins from starting rust-analyzer
+            vim.g.rustaceanvim_lsp_client_id = nil
             vim.g.rustaceanvim = {
+                tools = {
+                    executor = "termopen",        -- Executor for runnables/debuggables
+                    test_executor = "background", -- Background test execution
+                    enable_nextest = true,        -- Use cargo-nextest if available
+                    enable_clippy = true,         -- Enable clippy checks
+                },
                 server = {
+                    auto_attach = true, -- Automatically attach to rust files
                     on_attach = function(_, bufnr)
                         -- Rust-specific keymaps
                         vim.keymap.set("n", "<leader>cR", function()
@@ -16,8 +35,14 @@ return {
                         vim.keymap.set("n", "<leader>dr", function()
                             vim.cmd.RustLsp("debuggables")
                         end, { desc = "Rust Debuggables", buffer = bufnr })
+                        vim.keymap.set("n", "<leader>rr", function()
+                            vim.cmd.RustLsp("runnables")
+                        end, { desc = "Rust Runnables", buffer = bufnr })
+                        vim.keymap.set("n", "<leader>rt", function()
+                            vim.cmd.RustLsp("testables")
+                        end, { desc = "Rust Testables", buffer = bufnr })
                     end,
-                    settings = {
+                    default_settings = {
                         ["rust-analyzer"] = {
                             cargo = {
                                 allFeatures = true,
@@ -29,12 +54,17 @@ return {
                             procMacro = {
                                 enable = true,
                             },
+                            diagnostics = {
+                                enable = true,
+                                experimental = {
+                                    enable = true,
+                                },
+                            },
                         },
                     },
                 },
                 dap = {
-                    -- Will automatically configure codelldb if mason has it installed
-                    autoload_configurations = true,
+                    autoload_configurations = true, -- Automatically configure debug adapters
                 },
             }
         end,
@@ -64,18 +94,6 @@ return {
                     completion = true,
                     hover = true,
                 },
-            })
-        end,
-    },
-
-    -- Ensure Rust tools are available
-    {
-        "williamboman/mason.nvim",
-        opts = function(_, opts)
-            opts.ensure_installed = opts.ensure_installed or {}
-            vim.list_extend(opts.ensure_installed, {
-                "rust-analyzer",
-                "codelldb",
             })
         end,
     },
