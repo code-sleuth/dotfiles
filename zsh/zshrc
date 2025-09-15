@@ -386,3 +386,6 @@ export PATH="$PATH:/Users/code/.local/bin"
 
 # NIX
 export PATH="/run/current-system/sw/bin:$PATH"
+
+# Cargo
+export PATH="$HOME/.cargo/bin:$PATH"
