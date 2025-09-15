@@ -55,6 +55,7 @@ in
 
     # Programming Languages & Runtimes
     rustup
+    rust-analyzer
     go
     zig
     bun
