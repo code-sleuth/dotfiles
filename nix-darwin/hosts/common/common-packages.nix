@@ -81,7 +81,7 @@ in
 
     # Container & Virtualization
     podman
-    podman-desktop
+    # podman-desktop
     podman-compose
     docker-compose
     lima
@@ -99,7 +99,7 @@ in
     # DevOps & Automation
     opentofu
     terraform
-    ansible
+    # ansible
     buildkit
 
     # Development Services
