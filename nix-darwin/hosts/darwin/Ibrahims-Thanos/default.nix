@@ -1,7 +1,7 @@
 { ... }:
 {
   # Host-specific configuration for Ibrahims-Thanos
-  
+
   # Disable widgets and Stage Manager
   system.defaults = {
     WindowManager = {

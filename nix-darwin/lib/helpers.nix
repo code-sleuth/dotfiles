@@ -1,15 +1,14 @@
-{
-  inputs,
-  outputs,
-  stateVersion,
-  ...
+{ inputs
+, outputs
+, stateVersion
+, ...
 }:
 {
   mkDarwin =
-    {
-      hostname,
-      username ? "code",
-      system ? "aarch64-darwin",
+    { hostname
+    , username ? "code"
+    , system ? "aarch64-darwin"
+    ,
     }:
     let
       inherit (inputs.nixpkgs) lib;

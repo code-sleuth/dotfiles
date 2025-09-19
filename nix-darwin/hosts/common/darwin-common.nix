@@ -1,13 +1,12 @@
-{
-  inputs,
-  config,
-  lib,
-  hostname,
-  system,
-  username,
-  pkgs,
-  unstablePkgs,
-  ...
+{ inputs
+, config
+, lib
+, hostname
+, system
+, username
+, pkgs
+, unstablePkgs
+, ...
 }:
 let
   inherit (inputs) nixpkgs nixpkgs-unstable;

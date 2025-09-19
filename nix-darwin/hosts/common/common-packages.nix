@@ -1,8 +1,7 @@
-{
-  inputs,
-  pkgs,
-  unstablePkgs,
-  ...
+{ inputs
+, pkgs
+, unstablePkgs
+, ...
 }:
 let
   inherit (inputs) nixpkgs nixpkgs-unstable;
@@ -63,6 +62,7 @@ in
     pnpm
     nixd # Nix language server
     nil # Nix language server
+    nixpkgs-fmt
 
     # Rust Development Tools
     cargo-audit
