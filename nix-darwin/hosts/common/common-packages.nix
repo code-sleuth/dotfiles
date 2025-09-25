@@ -1,7 +1,8 @@
-{ inputs
-, pkgs
-, unstablePkgs
-, ...
+{
+  inputs,
+  pkgs,
+  unstablePkgs,
+  ...
 }:
 let
   inherit (inputs) nixpkgs nixpkgs-unstable;
@@ -73,7 +74,7 @@ in
     grcov
 
     # Build Systems & Compilation
-    cmake
+    #cmake # nix pkg is at v3.31.7, i want v4
     ninja
     gnumake
     binutils
@@ -156,5 +157,6 @@ in
 
     # Fun & Entertainment
     cmatrix
+    # libusb1
   ];
 }
