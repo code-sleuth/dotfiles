@@ -1,10 +1,11 @@
 # Enhanced Home Manager configuration for user "code"
 # Inspired by ironicbadger's configuration structure
-{ config
-, inputs
-, pkgs
-, lib
-, ...
+{
+  config,
+  inputs,
+  pkgs,
+  lib,
+  ...
 }:
 {
   home.stateVersion = "23.05";
@@ -106,6 +107,10 @@
     };
     ".config/scripts" = {
       source = ../../scripts;
+      enable = true;
+    };
+    ".config/btop" = {
+      source = ../../btop;
       enable = true;
     };
   };
