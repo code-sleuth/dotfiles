@@ -13,7 +13,13 @@ let
   inherit (inputs) nixpkgs nixpkgs-unstable;
 in
 {
-  users.users.${username}.home = "/Users/${username}";
+  users.users.${username} = {
+    home = "/Users/${username}";
+    shell = pkgs.nushell;
+  };
+
+  # Add nushell to valid login shells
+  environment.shells = [ pkgs.nushell ];
 
   nix = {
     settings = {

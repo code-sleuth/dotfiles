@@ -1,5 +1,8 @@
 # By default Reload config with shft + cmd + ,
 config-file = themes/rosepine
+
+# Shell configuration
+command = /run/current-system/sw/bin/nu
 #background = #000000
 background-opacity = 0.75
 background-blur-radius = 23

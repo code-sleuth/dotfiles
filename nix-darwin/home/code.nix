@@ -113,6 +113,10 @@
       source = ../../btop;
       enable = true;
     };
+    "/Users/code/Library/Application Support/nushell" = {
+      source = ../../nushell;
+      enable = true;
+    };
   };
 
   # Environment variables
