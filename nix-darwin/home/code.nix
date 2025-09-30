@@ -57,10 +57,6 @@
       source = ../../sketchybar;
       enable = true;
     };
-    ".config/nushell" = {
-      source = ../../nushell;
-      enable = true;
-    };
     ".config/git" = {
       source = ../../git;
       enable = true;
@@ -113,8 +109,20 @@
       source = ../../btop;
       enable = true;
     };
-    "/Users/code/Library/Application Support/nushell" = {
-      source = ../../nushell;
+    ".local/share/nushell/.keep" = {
+      text = "";
+      enable = true;
+    };
+    ".cache/nushell/.keep" = {
+      text = "";
+      enable = true;
+    };
+    ".cache/starship/.keep" = {
+      text = "";
+      enable = true;
+    };
+    ".cache/carapace/.keep" = {
+      text = "";
       enable = true;
     };
   };
@@ -123,6 +131,8 @@
   home.sessionVariables = {
     EDITOR = "zed";
     VISUAL = "zed";
+    XDG_DATA_HOME = "$HOME/.local/share";
+    XDG_CACHE_HOME = "$HOME/.cache";
   };
 
   # Session PATH additions
@@ -133,4 +143,13 @@
 
   # Enable Home Manager programs
   programs.home-manager.enable = true;
+
+  # Copy (not symlink) nushell config to allow writable history
+  # macOS uses ~/Library/Application Support/nushell as primary config location
+  home.activation.copyNushellConfig = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    $DRY_RUN_CMD mkdir -p "$HOME/Library/Application Support/nushell"
+    $DRY_RUN_CMD cp -f ${../../nushell}/config.nu "$HOME/Library/Application Support/nushell/config.nu"
+    $DRY_RUN_CMD cp -f ${../../nushell}/env.nu "$HOME/Library/Application Support/nushell/env.nu"
+    $DRY_RUN_CMD chmod u+w "$HOME/Library/Application Support/nushell"/*.nu
+  '';
 }

@@ -91,6 +91,18 @@ in
         echo "Warning: raycast CLI not found at expected location"
       fi
     '';
+
+    nushell-init.text = ''
+      echo "initializing nushell integrations..." >&2
+      mkdir -p /Users/${username}/.cache/starship
+      mkdir -p /Users/${username}/.cache/carapace
+      ${pkgs.starship}/bin/starship init nu > /Users/${username}/.cache/starship/init.nu
+      ${pkgs.zoxide}/bin/zoxide init nushell > /Users/${username}/.zoxide.nu
+      ${pkgs.carapace}/bin/carapace _carapace nushell > /Users/${username}/.cache/carapace/init.nu
+      chown ${username}:staff /Users/${username}/.cache/starship/init.nu
+      chown ${username}:staff /Users/${username}/.zoxide.nu
+      chown ${username}:staff /Users/${username}/.cache/carapace/init.nu
+    '';
   };
 
   # Homebrew configuration

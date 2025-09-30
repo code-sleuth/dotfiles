@@ -1,6 +1,6 @@
 # Nushell Config File
 #
-# version = "0.95.0"
+# version = "0.106.1"
 
 # For more information on defining custom themes, see
 # https://www.nushell.sh/book/coloring_and_theming.html
@@ -217,7 +217,6 @@ $env.config = {
     }
 
     color_config: $dark_theme # if you want a more interesting theme, you can replace the empty record with `$dark_theme`, `$light_theme` or another custom record
-    # use_grid_icons: true
     footer_mode: "auto" # always, never, number_of_rows, auto
     float_precision: 2 # the precision for displaying floats in tables
     buffer_editor: "" # command that will be used to edit the current line buffer with ctrl+o, if unset fallback to $env.EDITOR and $env.VISUAL
@@ -942,24 +941,11 @@ alias kns = kubens
 alias kl = kubectl logs -f
 alias ke = kubectl exec -it
 
-source ~/.config/nushell/env.nu
 source ~/.zoxide.nu
 source ~/.cache/carapace/init.nu
 #source ~/.local/share/atuin/init.nu
 use ~/.cache/starship/init.nu
 
-let ruby_ver = "3.4.0"
-let gem_home = ($nu.home-path | path join ".gem" "ruby" $ruby_ver)
-let gem_bin = ($gem_home | path join "bin")
-
-# Set GEM paths
-$env.GEM_HOME = $gem_home
-$env.GEM_PATH = $gem_home
-
-# Add gem bin to PATH if it exists
-if ($gem_bin | path exists) {
-  $env.PATH = ($env.PATH | prepend $gem_bin)
-}
 # minimum supported version = 0.93.0
 module compat {
   export def --wrapped "random uuid -v 7" [...rest] { atuin uuid }
