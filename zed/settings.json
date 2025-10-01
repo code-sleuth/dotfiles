@@ -61,6 +61,30 @@
         },
         "path": "/run/current-system/sw/bin/nil"
       }
+    },
+    "gopls": {
+      "binary": {
+        "path": "/Users/code/go/bin/gopls",
+        "arguments": [],
+        "env": {
+          "PATH": "/run/current-system/sw/bin:/Users/code/go/bin:/usr/local/bin:/usr/bin:/bin"
+        }
+      },
+      "initialization_options": {
+        "buildFlags": ["-tags=gopls"],
+        "hoverKind": "FullDocumentation",
+        "analyses": {
+          "shadow": true
+        }
+      }
+    },
+    "rust-analyzer": {
+      "binary": {
+        "path": "/run/current-system/sw/bin/rust-analyzer",
+        "env": {
+          "PATH": "/run/current-system/sw/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+        }
+      }
     }
   }
 }
