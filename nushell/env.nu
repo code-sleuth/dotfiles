@@ -91,11 +91,11 @@ $env.NU_PLUGIN_DIRS = [
 # Manually prepend to PATH (avoids std library permission issues in interactive mode)
 $env.PATH = ($env.PATH | split row (char esep) | prepend [
     "/Users/code/.local/bin"
+    "/Users/code/go/bin"
     "/run/current-system/sw/bin"
     "/opt/homebrew/bin"
     "/opt/local/bin"
     "/Users/code/.cargo/bin"
-    "/Users/code/.bun/_bun"
     "/opt/homebrew/opt/llvm/bin"
     "/opt/riscv/bin"
 ] | uniq)
@@ -109,4 +109,18 @@ $env.STARSHIP_CONFIG = "/Users/code/.config/starship.toml"
 $env.NIX_CONF_DIR = "/Users/code/.config/nix"
 $env.CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense'
 $env.KUBE_CONFIG_PATH = "/Users/code/.kube/config"
+# Go configuration
+$env.GOPATH = "/Users/code/go"
+$env.GOBIN = "/Users/code/go/bin"
+
+# Node/nvm configuration
 $env.NVM_DIR = "/Users/code/.nvm"
+# Add current nvm node version to PATH if it exists
+if ('/Users/code/.nvm/versions/node' | path exists) {
+    let node_versions = (ls /Users/code/.nvm/versions/node | get name)
+    if ($node_versions | length) > 0 {
+        # Use the most recently modified version (typically the active one)
+        let current_node = ($node_versions | last)
+        $env.PATH = ($env.PATH | split row (char esep) | prepend ($current_node | path join 'bin') | uniq)
+    }
+}
