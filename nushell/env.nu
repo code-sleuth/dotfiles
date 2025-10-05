@@ -98,6 +98,7 @@ $env.PATH = ($env.PATH | split row (char esep) | prepend [
     "/Users/code/.cargo/bin"
     "/opt/homebrew/opt/llvm/bin"
     "/opt/riscv/bin"
+    "/Users/code/.local/share/solana/install/active_release/bin"
 ] | uniq)
 
 # To load from a custom file you can use:
