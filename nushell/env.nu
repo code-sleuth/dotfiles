@@ -99,6 +99,7 @@ $env.PATH = ($env.PATH | split row (char esep) | prepend [
     "/opt/homebrew/opt/llvm/bin"
     "/opt/riscv/bin"
     "/Users/code/.local/share/solana/install/active_release/bin"
+    "/Users/code/Library/Application Support/JetBrains/Toolbox/scripts"
 ] | uniq)
 
 # To load from a custom file you can use:
