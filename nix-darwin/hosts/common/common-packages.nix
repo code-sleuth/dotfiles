@@ -55,7 +55,7 @@ in
 
     # Programming Languages & Runtimes
     rustup
-    rust-analyzer
+    # rust-analyzer: will be installed using rustup
     go
     zig
     bun
