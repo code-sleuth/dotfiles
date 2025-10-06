@@ -20,6 +20,7 @@ zed/prompts
 zed/conversations
 plans
 containers
+.idea
 
 
 # node modules
