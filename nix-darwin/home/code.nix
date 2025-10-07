@@ -142,7 +142,7 @@
 
   # Copy (not symlink) nushell config to allow writable history
   # macOS uses ~/Library/Application Support/nushell as primary config location
-  home.activation.copyNushellConfig = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  home.activation.copyNushellConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     $DRY_RUN_CMD mkdir -p "$HOME/Library/Application Support/nushell"
     $DRY_RUN_CMD cp -f ${../../nushell}/config.nu "$HOME/Library/Application Support/nushell/config.nu"
     $DRY_RUN_CMD cp -f ${../../nushell}/env.nu "$HOME/Library/Application Support/nushell/env.nu"
@@ -150,7 +150,7 @@
   '';
 
   # Copy (not symlink) tmux config to allow TPM to install plugins
-  home.activation.copyTmuxConfig = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  home.activation.copyTmuxConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     $DRY_RUN_CMD rm -rf "$HOME/.config/tmux"
     $DRY_RUN_CMD mkdir -p "$HOME/.config/tmux/plugins"
     $DRY_RUN_CMD cp -r "$HOME/dotfiles/tmux"/* "$HOME/.config/tmux/"
