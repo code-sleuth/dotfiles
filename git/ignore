@@ -21,7 +21,8 @@ zed/conversations
 plans
 containers
 .idea
-
+test-ledger
+.cargo
 
 # node modules
 node_modules
