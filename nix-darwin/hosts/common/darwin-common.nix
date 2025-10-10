@@ -131,6 +131,7 @@ in
       "notion-calendar" # Calendar app
       "obsidian" # Knowledge management
       "plex" # media server
+      "jellyfin" # media server
     ];
 
     brews = [

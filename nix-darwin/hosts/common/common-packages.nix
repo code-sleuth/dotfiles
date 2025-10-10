@@ -17,7 +17,7 @@ in
     gnused
     wget
     watch
-    flock
+    # flock
     direnv
     sshs
 
@@ -106,7 +106,6 @@ in
     # Development Services
     redis
     protobuf
-    jellyfin
 
     # Security & Cryptography
     pass
