@@ -23,6 +23,7 @@ containers
 .idea
 test-ledger
 .cargo
+.anchor
 
 # node modules
 node_modules
