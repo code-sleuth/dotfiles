@@ -112,6 +112,7 @@ in
       cleanup = "zap";
       autoUpdate = true;
       upgrade = true;
+      extraFlags = [ "--verbose" ]; # i want to see progress
     };
 
     casks = [
