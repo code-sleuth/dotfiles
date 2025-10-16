@@ -101,6 +101,7 @@ $env.PATH = ($env.PATH | split row (char esep) | prepend [
     "/Users/code/.local/share/solana/install/active_release/bin"
     "/Users/code/.local/share/solana/install/releases/stable-f1c269ac192282e7e061735a473b861221974ea2/solana-release/bin/"
     "/Users/code/Library/Application Support/JetBrains/Toolbox/scripts"
+    "/usr/local/bin"
 ] | uniq)
 
 # To load from a custom file you can use:
