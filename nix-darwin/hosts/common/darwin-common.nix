@@ -133,6 +133,7 @@ in
       "obsidian" # Knowledge management
       "plex" # media server
       "jellyfin" # media server
+      "flutter"
     ];
 
     brews = [
