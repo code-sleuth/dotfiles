@@ -134,6 +134,8 @@ in
       "plex" # media server
       "jellyfin" # media server
       "flutter"
+      "claude-code"
+      "expressvpn"
     ];
 
     brews = [
@@ -179,7 +181,6 @@ in
       # Custom taps and formulae
       "felixkratz/formulae/sketchybar"
       "filosottile/musl-cross/musl-cross"
-      "go-swagger/go-swagger/go-swagger"
       "messense/macos-cross-toolchains/aarch64-unknown-linux-gnu"
       "messense/macos-cross-toolchains/x86_64-unknown-linux-gnu"
       "riscv/riscv/riscv-gnu-toolchain"
@@ -190,7 +191,6 @@ in
     taps = [
       "felixkratz/formulae"
       "filosottile/musl-cross"
-      "homebrew/services"
       "libsql/sqld"
       "messense/macos-cross-toolchains"
       "nikitabobko/tap"
