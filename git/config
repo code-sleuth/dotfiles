@@ -1,7 +1,7 @@
 [user]
     name = Ibrahim Mbaziira
     email = code.ibra@gmail.com
-    signingkey = 962FF655AEDD5D3C
+    signingkey = 90CEC26C2DA90D65A751ECED9E900E9767E815A0
 
 [gpg]
 	program = gpg
