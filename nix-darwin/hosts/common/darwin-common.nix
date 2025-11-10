@@ -155,6 +155,7 @@ in
       "jpeg-turbo"
       "zlib"
       "texinfo"
+      "cocoapods"
 
       # Tools that may need homebrew versions for compatibility
       "nvm" # Node Version Manager
