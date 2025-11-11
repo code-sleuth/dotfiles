@@ -23,7 +23,10 @@
   },
   "terminal": {
     "font_family": "JetBrainsMono Nerd Font",
-    "dock": "bottom"
+    "dock": "bottom",
+    "shell": {
+      "program": "/run/current-system/sw/bin/nu"
+    }
   },
   "autosave": "on_focus_change",
   "ui_font_size": 20,
