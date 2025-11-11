@@ -57,6 +57,9 @@ in
     rustup
     # rust-analyzer: will be installed using rustup
     go
+    gotools
+    golines
+    golangci-lint
     zig
     bun
     yarn
