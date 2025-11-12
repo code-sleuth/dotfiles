@@ -1,5 +1,4 @@
-# Enhanced Home Manager configuration for user "code"
-# Inspired by ironicbadger's configuration structure
+# Home Manager configuration for user "code"
 {
   config,
   inputs,
