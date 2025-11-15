@@ -10,6 +10,15 @@ in
 {
   nixpkgs.config.allowUnfree = true;
 
+  # Override fish to skip tests that fail on macOS
+  nixpkgs.overlays = [
+    (final: prev: {
+      fish = prev.fish.overrideAttrs (oldAttrs: {
+        doCheck = false;
+      });
+    })
+  ];
+
   environment.systemPackages = with pkgs; [
     # Core System Utilities
     coreutils
