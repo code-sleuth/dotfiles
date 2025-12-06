@@ -16,6 +16,7 @@ in
   users.users.${username} = {
     home = "/Users/${username}";
     shell = pkgs.nushell;
+    uid = 501;
   };
 
   # Add nushell to valid login shells
