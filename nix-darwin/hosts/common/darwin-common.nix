@@ -125,6 +125,7 @@ in
       "flutter"
       "claude-code"
       #"expressvpn"
+      "tailscale"
     ];
 
     brews = [
