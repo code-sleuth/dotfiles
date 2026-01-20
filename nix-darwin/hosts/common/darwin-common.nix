@@ -124,7 +124,7 @@ in
       "jellyfin" # media server
       "flutter"
       "claude-code"
-      "expressvpn"
+      #"expressvpn"
     ];
 
     brews = [
