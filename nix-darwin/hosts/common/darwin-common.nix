@@ -146,6 +146,7 @@ in
       "zlib"
       "texinfo"
       "cocoapods"
+      "opencode"
 
       # Tools that may need homebrew versions for compatibility
       "nvm" # Node Version Manager
