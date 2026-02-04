@@ -38,6 +38,13 @@ in
   nixpkgs = {
     config.allowUnfree = true;
     hostPlatform = lib.mkDefault system;
+    overlays = [
+      (final: prev: {
+        nushell = prev.nushell.overrideAttrs (oldAttrs: {
+          doCheck = false;
+        });
+      })
+    ];
   };
 
   # Add ability to used TouchID for sudo authentication
@@ -125,7 +132,7 @@ in
       "flutter"
       "claude-code"
       #"expressvpn"
-      "tailscale"
+      "tailscale-app"
     ];
 
     brews = [
