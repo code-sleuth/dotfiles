@@ -135,6 +135,7 @@ in
       "tailscale-app"
       "netbirdio/tap/netbird-ui"
       "obs"
+      "zoom"
     ];
 
     brews = [
