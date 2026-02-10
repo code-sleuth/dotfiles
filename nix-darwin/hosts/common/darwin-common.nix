@@ -133,6 +133,7 @@ in
       "claude-code"
       #"expressvpn"
       "tailscale-app"
+      "netbirdio/tap/netbird-ui"
     ];
 
     brews = [
@@ -153,12 +154,13 @@ in
       "zlib"
       "texinfo"
       "cocoapods"
-      "opencode"
-      "virtualenv"
 
       # Tools that may need homebrew versions for compatibility
       "nvm" # Node Version Manager
       "python-setuptools" # Python build tools
+      "opencode"
+      "virtualenv"
+      "netbirdio/tap/netbird"
 
       # Specialized tools not readily available in nix
       "geni" # Network emulator
