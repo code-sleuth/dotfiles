@@ -134,6 +134,7 @@ in
       #"expressvpn"
       "tailscale-app"
       "netbirdio/tap/netbird-ui"
+      "obs"
     ];
 
     brews = [
