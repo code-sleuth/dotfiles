@@ -50,12 +50,6 @@ in
     # Development Editors & IDEs
     vim
     neovim
-    zed-editor
-    # Create a wrapper to make zed CLI available in system PATH
-    (pkgs.writeShellScriptBin "zed" ''
-      exec ${pkgs.zed-editor}/Applications/Zed.app/Contents/MacOS/cli "$@"
-    '')
-
     # Version Control & Collaboration
     lazygit
     gh

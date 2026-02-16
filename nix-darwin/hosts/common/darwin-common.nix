@@ -119,6 +119,7 @@ in
       "stats" # macOS system monitor (not in nix)
       "google-chrome" # chrome
       "ghostty"
+      "zed" # Code editor
       "zen" # Zen Browser
       "slack" # Team communication
       "discord" # Chat and voice communication
