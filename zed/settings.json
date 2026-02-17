@@ -15,8 +15,8 @@
       "model": "claude-3-7-sonnet-latest"
     }
   },
-  "features": {
-    "edit_prediction_provider": "none"
+  "edit_predictions": {
+    "provider": "none"
   },
   "project_panel": {
     "dock": "right"
