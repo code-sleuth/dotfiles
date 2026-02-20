@@ -165,6 +165,7 @@ in
       "opencode"
       "virtualenv"
       "netbirdio/tap/netbird"
+      "git-lfs"
 
       # Specialized tools not readily available in nix
       "geni" # Network emulator
