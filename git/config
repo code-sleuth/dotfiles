@@ -129,6 +129,12 @@
 #[diff-so-fancy]
 #    markEmptyLines = false
 
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+
 # URL shortcuts
 [url "ssh://git@github.com/"]
 	insteadOf = https://github.com/
