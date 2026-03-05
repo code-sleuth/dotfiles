@@ -137,7 +137,7 @@ in
       # "netbirdio/tap/netbird-ui"
       "obs"
       "zoom"
-      "f/textream/textream"
+      # "f/textream/textream"
     ];
 
     brews = [
