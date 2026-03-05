@@ -134,7 +134,7 @@ in
       "claude-code"
       #"expressvpn"
       "tailscale-app"
-      "netbirdio/tap/netbird-ui"
+      # "netbirdio/tap/netbird-ui"
       "obs"
       "zoom"
       "f/textream/textream"
@@ -164,7 +164,7 @@ in
       "python-setuptools" # Python build tools
       "opencode"
       "virtualenv"
-      "netbirdio/tap/netbird"
+      # "netbirdio/tap/netbird"
       "git-lfs"
 
       # Specialized tools not readily available in nix
