@@ -132,7 +132,7 @@ in
       "jellyfin" # media server
       "flutter"
       "claude-code"
-      #"expressvpn"
+      "expressvpn"
       "tailscale-app"
       # "netbirdio/tap/netbird-ui"
       "obs"
