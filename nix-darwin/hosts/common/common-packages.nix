@@ -17,7 +17,7 @@ in
         doCheck = false;
       });
       direnv = prev.direnv.overrideAttrs (oldAttrs: {
-        CGO_ENABLED = "1";
+        env = (oldAttrs.env or {}) // { CGO_ENABLED = "1"; };
       });
     })
   ];
