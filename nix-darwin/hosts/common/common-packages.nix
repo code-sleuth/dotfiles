@@ -16,6 +16,9 @@ in
       fish = prev.fish.overrideAttrs (oldAttrs: {
         doCheck = false;
       });
+      direnv = prev.direnv.overrideAttrs (oldAttrs: {
+        CGO_ENABLED = "1";
+      });
     })
   ];
 
