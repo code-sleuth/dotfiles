@@ -131,7 +131,7 @@ in
       "plex" # media server
       "jellyfin" # media server
       "flutter"
-      "claude-code"
+      # "claude-code"
       # "expressvpn"
       "tailscale-app"
       # "netbirdio/tap/netbird-ui"
