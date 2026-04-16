@@ -137,6 +137,7 @@ in
       # "netbirdio/tap/netbird-ui"
       "obs"
       "zoom"
+      "ngrok"
       # "f/textream/textream"
     ];
 
