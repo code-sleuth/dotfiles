@@ -148,12 +148,13 @@
     $DRY_RUN_CMD chmod u+w "$HOME/Library/Application Support/nushell"/*.nu
   '';
 
-  # Initialize nushell integrations (starship, zoxide, carapace)
+  # Initialize nushell integrations (starship, zoxide, carapace, atuin)
   home.activation.initNushellIntegrations = lib.hm.dag.entryAfter [ "copyNushellConfig" ] ''
-    $DRY_RUN_CMD mkdir -p "$HOME/.cache/starship" "$HOME/.cache/carapace"
+    $DRY_RUN_CMD mkdir -p "$HOME/.cache/starship" "$HOME/.cache/carapace" "$HOME/.cache/atuin"
     $DRY_RUN_CMD ${pkgs.starship}/bin/starship init nu > "$HOME/.cache/starship/init.nu"
     $DRY_RUN_CMD ${pkgs.zoxide}/bin/zoxide init nushell > "$HOME/.zoxide.nu"
     $DRY_RUN_CMD ${pkgs.carapace}/bin/carapace _carapace nushell > "$HOME/.cache/carapace/init.nu"
+    $DRY_RUN_CMD ${pkgs.atuin}/bin/atuin init nu > "$HOME/.cache/atuin/init.nu"
   '';
 
   # Copy (not symlink) tmux config to allow TPM to install plugins
