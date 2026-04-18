@@ -138,6 +138,7 @@ in
       "obs"
       "zoom"
       "ngrok"
+      "cmux"
       # "f/textream/textream"
     ];
 
