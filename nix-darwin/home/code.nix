@@ -88,6 +88,14 @@
       source = ../../zed/settings.json;
       enable = true;
     };
+    ".config/cmux/settings.json" = {
+      source = ../../cmux/settings.json;
+      enable = true;
+    };
+    ".config/cmux/cmux.json" = {
+      source = ../../cmux/cmux.json;
+      enable = true;
+    };
     ".config/wezterm" = {
       source = ../../wezterm;
       enable = true;
