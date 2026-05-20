@@ -145,7 +145,7 @@ in
     ledger
     wakatime-cli
     when
-    pipx
+    uv
 
     # Web Assembly (WASM)
     wasm-pack

@@ -83,11 +83,6 @@ alias ping='ping -4A'
 alias -g p='2>&1 | less'
 alias sudo='sudo '  # allow aliases with sudo
 
-# Aliases: poetry
-alias pti='poetry install'
-alias ptr='poetry run'
-alias pte='poetry run $EDITOR'
-
 # Aliases: ledger
 alias lg='ledger'
 alias lga='ledger accounts'
@@ -365,21 +360,6 @@ ZSH_HIGHLIGHT_STYLES[redirection]='fg=cyan'
 # Paths
 ZSH_HIGHLIGHT_STYLES[path]='none'
 
-# Conda: lazy init (full `conda init` block costs ~280ms; defer until first use)
-# Put conda's bin on PATH so `conda` resolves; the shell hook runs on first invocation.
-export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
-conda() {
-  unfunction conda
-  __conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-  if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-  elif [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
-    . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
-  fi
-  unset __conda_setup
-  conda "$@"
-}
-
 export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 export PATH="/opt/riscv/bin:$PATH"
 export PATH="$HOME/go/bin:$PATH"
@@ -419,7 +399,7 @@ export PATH="/opt/local/bin:$PATH"
 export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
 export PATH="$HOME/.local/share/solana/install/releases/stable-f1c269ac192282e7e061735a473b861221974ea2/solana-release/bin/:$PATH"
 
-# Created by `pipx` on 2025-08-01 12:18:18
+# ~/.local/bin: default install dir for `uv tool install` and similar
 export PATH="$PATH:/Users/code/.local/bin"
 
 # bun completions

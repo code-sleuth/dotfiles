@@ -115,7 +115,6 @@ in
       # GUI apps that are better managed through homebrew or unavailable in nix
       "aerospace" # Tiling window manager for macOS
       "docker-desktop" # Docker Desktop
-      "miniconda" # Conda environment management
       "stats" # macOS system monitor (not in nix)
       "google-chrome" # chrome
       "ghostty"
@@ -163,9 +162,7 @@ in
 
       # Tools that may need homebrew versions for compatibility
       "nvm" # Node Version Manager
-      "python-setuptools" # Python build tools
       "opencode"
-      "virtualenv"
       # "netbirdio/tap/netbird"
       "git-lfs"
 
