@@ -114,10 +114,11 @@ man() {
   command man "$@"
 }
 
-# Prompt
-PROMPT=$'%{\033[34m%} %2~ %{\033[0m%}'
-PROMPT2=$'%{\033[33m%} ... %{\033[0m%}'
-RPROMPT=$'%(0?..%(130?..%{\033[31m%}%?%{\033[0m%}))'
+# Prompt: starship (config at ~/.config/starship.toml, shared with nushell)
+export STARSHIP_CONFIG="$HOME/.config/starship.toml"
+if command -v starship >/dev/null 2>&1; then
+  eval "$(starship init zsh)"
+fi
 
 # ZLE
 KEYTIMEOUT=10000 # 10ms for grouping escape sequences
@@ -165,6 +166,8 @@ setopt glob_dots  # include dotfiles into completion by default
 setopt hash_cmds  # hash command locations
 setopt list_packed
 
+zmodload zsh/complist  # required for menu-select navigation (arrows, vim motions)
+fpath=($HOME/.docker/completions $fpath)  # Docker CLI completions (moved here so compinit picks them up)
 autoload -Uz compinit
 compinit -C  # -C disables security checks on dump file
 
@@ -173,18 +176,39 @@ compinit -C  # -C disables security checks on dump file
 # _extensions will complete glob patters with extensions
 zstyle ':completion:*' completer _extensions _complete _approximate
 
-zstyle ':completion:*' menu select  # menu with selection
+zstyle ':completion:*' menu no-select  # fzf-tab renders the picker, so disable zsh's native menu
 zstyle ':completion:*' increment yes
 zstyle ':completion:*' verbose yes
 zstyle ':completion:*' squeeze-slashes yes  # replace // with /
 
 zstyle ':completion:*' file-sort modification  # show recently used files first
 zstyle ':completion:*' list-dirs-first yes
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"  # colored files and directories, blue selection box
+# Color: LS_COLORS for files/dirs + nushell-style name/description coloring
+# Pattern groups: (name)( -- )(description) → default, dim, yellow
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS} '=(#b)(*)( -- )(*)=0=2=33'
 zstyle ':completion:*' ignored-patterns '.git'
 
 zstyle ':completion:*' rehash false  # improves performance
 zstyle ':completion:*' use-cache true
+
+# Carapace: multi-shell completion engine (bridges bash/fish/zsh completions)
+export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':completion:*:git-checkout:*' sort false
+if command -v carapace >/dev/null 2>&1; then
+  source <(carapace _carapace zsh)
+fi
+
+# fzf-tab: replaces zsh's default completion menu with an fzf picker
+# (gives the same arrow/j/k/Tab navigation experience as nushell's completion_menu)
+# NOTE: the plugin itself is sourced AFTER `eval "$(fzf --zsh)"` further down,
+# because fzf's shell integration rebinds Tab to `fzf-completion` and would clobber us.
+zstyle ':fzf-tab:*' use-fzf-default-opts no
+zstyle ':fzf-tab:*' fzf-flags \
+  '--color=fg:#cbe0f0,bg:-1,hl:#ffcc66,fg+:#011628,bg+:#7dcfff,hl+:#011628,gutter:-1,info:#7dcfff,border:#143652,prompt:#7dcfff,pointer:#7dcfff,marker:#7dcfff' \
+  '--no-info' '--no-separator' '--prompt= ' '--pointer= ' '--layout=reverse' '--height=40%'
+zstyle ':fzf-tab:*' switch-group '<' '>'
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza --color=always --long --git --icons=always $realpath 2>/dev/null || ls -la $realpath'
 
 
 # Keyboard
@@ -192,9 +216,8 @@ unsetopt flow_control  # disable ^S / ^Q
 
 bindkey -e  # Zsh default keybindings are vim, because EDITOR is set to vim, use emacs ones
 
-bindkey '^I' complete-word  # Tab, complete instead of expand-and-complete
+# Tab uses zsh's default `expand-or-complete`, which fzf-tab wraps to render the fzf picker
 bindkey '^[[3~' delete-char  # Delete
-bindkey '^[[Z' reverse-menu-complete  # Shift+Tab
 bindkey '^[[1;5D' backward-word  # Control-Left
 bindkey '^[[1;5C' forward-word  # Control-Right
 
@@ -216,6 +239,9 @@ bindkey '^Z' fg-ctrl-z
 
 # set up fzf key bindings and fuzzy completion
 eval "$(fzf --zsh)"
+
+# Source fzf-tab LAST so it rebinds Tab from fzf's `fzf-completion` back to its own picker
+source $HOME/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh
 alias nlof="~/.config/scripts/fzf_list_old_files.sh"
 
 export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
@@ -289,7 +315,7 @@ ze() {
 }
 
 # Plugin: autosuggestions
-source $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # use atuin for history
 source $HOME/.config/scripts/atuin.sh
@@ -302,7 +328,7 @@ alias v="nvim"
 # ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=40
 
 # Plugin: syntax highlighting
-source $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $HOME/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 ZSH_HIGHLIGHT_MAXLENGTH=120
@@ -339,20 +365,20 @@ ZSH_HIGHLIGHT_STYLES[redirection]='fg=cyan'
 # Paths
 ZSH_HIGHLIGHT_STYLES[path]='none'
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
+# Conda: lazy init (full `conda init` block costs ~280ms; defer until first use)
+# Put conda's bin on PATH so `conda` resolves; the shell hook runs on first invocation.
+export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
+conda() {
+  unfunction conda
+  __conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+  if [ $? -eq 0 ]; then
     eval "$__conda_setup"
-else
-    if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
-        . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
-    else
-        export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
+  elif [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+    . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+  fi
+  unset __conda_setup
+  conda "$@"
+}
 
 export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 export PATH="/opt/riscv/bin:$PATH"
@@ -367,15 +393,29 @@ export PATH="$HOME/go/bin:$PATH"
 # export CPPFLAGS="-I/opt/homebrew/opt/binutils/include"
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+# NVM: lazy init (sourcing nvm.sh + nvm_auto costs ~480ms; defer until needed).
+# Add the most recent installed node version to PATH so `node`/`npm` work without sourcing nvm.
+if [ -d "$NVM_DIR/versions/node" ]; then
+  _nvm_latest_node="$(command ls -t "$NVM_DIR/versions/node" 2>/dev/null | head -1)"
+  [ -n "$_nvm_latest_node" ] && export PATH="$NVM_DIR/versions/node/$_nvm_latest_node/bin:$PATH"
+  unset _nvm_latest_node
+fi
+# Wrap nvm-aware commands so the first call sources nvm.sh, then re-runs itself.
+_nvm_lazy_load() {
+  unset -f nvm node npm npx yarn pnpm corepack 2>/dev/null
+  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
+}
+nvm()      { _nvm_lazy_load && nvm "$@"; }
+node()     { _nvm_lazy_load && node "$@"; }
+npm()      { _nvm_lazy_load && npm "$@"; }
+npx()      { _nvm_lazy_load && npx "$@"; }
+yarn()     { _nvm_lazy_load && yarn "$@"; }
+pnpm()     { _nvm_lazy_load && pnpm "$@"; }
+corepack() { _nvm_lazy_load && corepack "$@"; }
 export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
 export KUBE_CONFIG_PATH="$HOME/.kube/config"
 export PATH="/opt/local/bin:$PATH"
-# The following lines have been added by Docker Desktop to enable Docker CLI completions.
-fpath=($HOME/.docker/completions $fpath)
-autoload -Uz compinit
-compinit
-# End of Docker CLI completions
+# Docker CLI completions are wired in above (added to fpath before the first compinit)
 export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
 export PATH="$HOME/.local/share/solana/install/releases/stable-f1c269ac192282e7e061735a473b861221974ea2/solana-release/bin/:$PATH"
 

@@ -112,6 +112,18 @@
       source = ../../btop;
       enable = true;
     };
+    ".zsh/plugins/zsh-autosuggestions" = {
+      source = "${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions";
+      enable = true;
+    };
+    ".zsh/plugins/zsh-syntax-highlighting" = {
+      source = "${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting";
+      enable = true;
+    };
+    ".zsh/plugins/fzf-tab" = {
+      source = "${pkgs.zsh-fzf-tab}/share/fzf-tab";
+      enable = true;
+    };
     ".local/share/nushell/.keep" = {
       text = "";
       enable = true;

@@ -15,12 +15,12 @@ in
 {
   users.users.${username} = {
     home = "/Users/${username}";
-    shell = pkgs.nushell;
+    shell = pkgs.zsh;
     uid = 501;
   };
 
-  # Add nushell to valid login shells
-  environment.shells = [ pkgs.nushell ];
+  # Valid login shells (zsh is default; nushell still selectable via `chsh`)
+  environment.shells = [ pkgs.zsh pkgs.nushell ];
 
   nix = {
     settings = {
