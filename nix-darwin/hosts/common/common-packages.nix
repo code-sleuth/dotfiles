@@ -19,6 +19,13 @@ in
       direnv = prev.direnv.overrideAttrs (oldAttrs: {
         env = (oldAttrs.env or {}) // { CGO_ENABLED = "1"; };
       });
+      bun = prev.bun.overrideAttrs (oldAttrs: rec {
+        version = "1.3.14";
+        src = prev.fetchurl {
+          url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-aarch64.zip";
+          hash = "sha256-2LliIYKK1vl6x6wKt+lYcjQa92MAHogD6CZ2UsJlJiA=";
+        };
+      });
     })
   ];
 
