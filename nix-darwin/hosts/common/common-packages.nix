@@ -116,6 +116,7 @@ in
     # DevOps & Automation
     opentofu
     terraform
+    packer
     # ansible
     buildkit
 
