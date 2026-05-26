@@ -193,6 +193,9 @@ zstyle ':completion:*:git-checkout:*' sort false
 if command -v carapace >/dev/null 2>&1; then
   source <(carapace _carapace zsh)
 fi
+if command -v hermes >/dev/null 2>&1; then
+  eval "$(hermes completion zsh)"
+fi
 
 # fzf-tab: replaces zsh's default completion menu with an fzf picker
 # (gives the same arrow/j/k/Tab navigation experience as nushell's completion_menu)
