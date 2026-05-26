@@ -413,3 +413,6 @@ export PATH="/run/current-system/sw/bin:$PATH"
 
 # Cargo
 export PATH="$HOME/.cargo/bin:$PATH"
+
+# Pi
+export PATH="/Users/code/.bun/bin:$PATH"
