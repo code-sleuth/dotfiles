@@ -405,6 +405,9 @@ export PATH="$PATH:/Users/code/.local/bin"
 # bun completions
 [ -s "/Users/code/.bun/_bun" ] && source "/Users/code/.bun/_bun"
 
+# Disable cmux's spacer line between command output and prompt
+functions[_cmux_prompt_wrap_guard]='return 0'
+
 # NIX
 export PATH="/run/current-system/sw/bin:$PATH"
 

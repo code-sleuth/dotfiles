@@ -183,5 +183,8 @@
     $DRY_RUN_CMD mkdir -p "$HOME/.config/tmux/plugins"
     $DRY_RUN_CMD cp -r "$HOME/dotfiles/tmux"/* "$HOME/.config/tmux/"
     $DRY_RUN_CMD chmod -R u+w "$HOME/.config/tmux"
+    if $DRY_RUN_CMD ${pkgs.tmux}/bin/tmux list-sessions >/dev/null 2>&1; then
+      $DRY_RUN_CMD ${pkgs.tmux}/bin/tmux source-file "$HOME/.config/tmux/tmux.conf" || true
+    fi
   '';
 }
