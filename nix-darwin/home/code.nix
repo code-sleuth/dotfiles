@@ -112,6 +112,10 @@
       source = ../../btop;
       enable = true;
     };
+    ".pi/agent/models.json" = {
+      source = ../../pi/agent/models.json;
+      enable = true;
+    };
     ".zsh/plugins/zsh-autosuggestions" = {
       source = "${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions";
       enable = true;
