@@ -32,9 +32,34 @@ containers/
 # Node modules
 node_modules/
 
-# Secrets
+# Secrets and credentials
 .env
+.env.*
 *.env
+!*.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.crt
+*.cer
+*.der
+**/secrets/
+**/credentials/
+*id_rsa*
+*id_ed25519*
+*id_ecdsa*
+*id_dsa*
+*.gpg
+*.asc
+service-account*.json
+*credentials*.json
+*secret*.json
+.netrc
+.npmrc
+.pypirc
 
 # Claude
 .claude/
@@ -57,3 +82,26 @@ result-*
 
 # Nix build outputs
 .direnv/
+
+# Shell history and local state
+.*_history
+.bash_history
+.zsh_history
+.node_repl_history
+.python_history
+
+# Editor local state
+*.swp
+*.swo
+*~
+
+# Terraform / IaC state
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# Cloud provider configs
+.aws/
+.gcloud/
+.azure/
+kubeconfig*

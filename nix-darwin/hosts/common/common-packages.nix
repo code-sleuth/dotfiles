@@ -67,8 +67,7 @@ in
     git-crypt
 
     # Programming Languages & Runtimes
-    rustup
-    # rust-analyzer: will be installed using rustup
+    rustup # rust-analyzer component must be added: `rustup component add rust-analyzer`
     go
     gotools
     golines
