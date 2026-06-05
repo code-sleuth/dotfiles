@@ -108,7 +108,11 @@ in
       cleanup = "zap";
       autoUpdate = true;
       upgrade = true;
-      extraFlags = [ "--verbose" ]; # i want to see progress
+      # --verbose: i want to see progress
+      # --force-cleanup: cleanup="zap" makes nix-darwin run `brew bundle --cleanup`,
+      #   which Homebrew 4.7+/5.x refuses to do without --force/--force-cleanup/$HOMEBREW_ASK.
+      #   nix-darwin doesn't add it itself, so we pass it here to keep activation non-interactive.
+      extraFlags = [ "--verbose" "--force-cleanup" ];
     };
 
     casks = [
