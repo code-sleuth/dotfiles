@@ -20,7 +20,10 @@ in
   };
 
   # Valid login shells (zsh is default; nushell still selectable via `chsh`)
-  environment.shells = [ pkgs.zsh pkgs.nushell ];
+  environment.shells = [
+    pkgs.zsh
+    pkgs.nushell
+  ];
 
   nix = {
     settings = {
@@ -112,7 +115,10 @@ in
       # --force-cleanup: cleanup="zap" makes nix-darwin run `brew bundle --cleanup`,
       #   which Homebrew 4.7+/5.x refuses to do without --force/--force-cleanup/$HOMEBREW_ASK.
       #   nix-darwin doesn't add it itself, so we pass it here to keep activation non-interactive.
-      extraFlags = [ "--verbose" "--force-cleanup" ];
+      extraFlags = [
+        "--verbose"
+        "--force-cleanup"
+      ];
     };
 
     casks = [
@@ -133,6 +139,7 @@ in
       "obsidian" # Knowledge management
       "plex" # media server
       "jellyfin" # media server
+      "plex-media-server" # media server
       "flutter"
       # "claude-code"
       # "expressvpn"
