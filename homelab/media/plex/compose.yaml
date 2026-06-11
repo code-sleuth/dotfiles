@@ -1,0 +1,38 @@
+services:
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    # Host mode is recommended by LinuxServer.io and Plex for autodiscovery / DLNA.
+    # Note: this means Plex binds every port it wants on the host (32400, 1900,
+    # 3005, 5353, 8324, 32410, 32412-32414, 32469). Switch to bridge mode + an
+    # explicit ports: list if you need that isolation, at the cost of autodiscovery.
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+      - VERSION=docker
+      # PLEX_CLAIM token is only needed on first run and expires after 4 minutes.
+      # Get one at https://plex.tv/claim. Leave blank on subsequent runs.
+      - PLEX_CLAIM=
+    devices:
+      # Intel QuickSync passthrough. NOTE: Plex requires a Plex Pass subscription
+      # for hardware transcoding; without one, this device does nothing.
+      - /dev/dri:/dev/dri
+    volumes:
+      - ./plex:/config
+      - /data:/data
+    restart: unless-stopped
+
+  tautulli:
+    image: lscr.io/linuxserver/tautulli:latest
+    container_name: tautulli
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+    volumes:
+      - ./tautulli:/config
+    ports:
+      - 8181:8181
+    restart: unless-stopped
