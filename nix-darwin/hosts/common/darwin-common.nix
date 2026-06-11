@@ -137,9 +137,9 @@ in
       "notion" # Note-taking and productivity
       "notion-calendar" # Calendar app
       "obsidian" # Knowledge management
-      "plex" # media server
-      "jellyfin" # media server
-      "plex-media-server" # media server
+      # "plex" # media server
+      # "jellyfin" # media server
+      # "plex-media-server" # media server
       "flutter"
       # "claude-code"
       # "expressvpn"
