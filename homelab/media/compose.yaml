@@ -1,5 +1,6 @@
-# Compose file for the *arr stack. Configuration files are stored in the
-# directory you launch the compose file on. Change to bind mounts if needed.
+# Compose file for the *arr stack, adapted for Docker Desktop on macOS.
+# App configs live on the internal disk (CONFIG_ROOT) and media/downloads
+# on the external 980 drive (DATA_ROOT) — both set in the .env file.
 # All containers are ran with user and group ids of the main user and
 # group to avoid permissions issues of downloaded files, please refer
 # the read me file for more information.
@@ -35,7 +36,7 @@ services:
       - 9696:9696 # prowlarr
       - 8191:8191 # flaresolverr
     volumes:
-      - ./gluetun:/gluetun
+      - ${CONFIG_ROOT}/gluetun:/gluetun
     # Make a '.env' file in the same directory.
     env_file:
       - .env
@@ -59,8 +60,8 @@ services:
       - WEBUI_PORT=8080 # must match "qbittorrent web interface" port number in gluetun's service above
       - TORRENTING_PORT=${FIREWALL_VPN_INPUT_PORTS} # airvpn forwarded port, pulled from .env
     volumes:
-      - ./qbittorrent:/config
-      - /data:/data
+      - ${CONFIG_ROOT}/qbittorrent:/config
+      - ${DATA_ROOT}:/data
     depends_on:
       gluetun:
         condition: service_healthy
@@ -94,9 +95,8 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./nzbget:/config
-      - /data:/data
+      - ${CONFIG_ROOT}/nzbget:/config
+      - ${DATA_ROOT}:/data
     depends_on:
       gluetun:
         condition: service_healthy
@@ -112,8 +112,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./prowlarr:/config
+      - ${CONFIG_ROOT}/prowlarr:/config
     restart: unless-stopped
     depends_on:
       gluetun:
@@ -145,9 +144,8 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./sonarr:/config
-      - /data:/data
+      - ${CONFIG_ROOT}/sonarr:/config
+      - ${DATA_ROOT}:/data
     ports:
       - 8989:8989
     networks:
@@ -163,9 +161,8 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./radarr:/config
-      - /data:/data
+      - ${CONFIG_ROOT}/radarr:/config
+      - ${DATA_ROOT}:/data
     ports:
       - 7878:7878
     networks:
@@ -177,9 +174,8 @@ services:
     image: lscr.io/linuxserver/lidarr:latest
     restart: unless-stopped
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./lidarr:/config
-      - /data:/data
+      - ${CONFIG_ROOT}/lidarr:/config
+      - ${DATA_ROOT}:/data
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -199,9 +195,8 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./bazarr:/config
-      - /data:/data
+      - ${CONFIG_ROOT}/bazarr:/config
+      - ${DATA_ROOT}:/data
     ports:
       - 6767:6767
     networks:
@@ -224,7 +219,7 @@ services:
       retries: 3
     restart: unless-stopped
     volumes:
-      - ./seerr:/app/config
+      - ${CONFIG_ROOT}/seerr:/app/config
     ports:
       - 5055:5055
     networks:

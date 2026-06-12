@@ -1,38 +1,37 @@
+# Plex + Tautulli, adapted for Docker Desktop on macOS.
+# Bridge networking with an explicit port instead of host mode (host mode is
+# unreliable under Docker Desktop). DLNA/autodiscovery ports are skipped —
+# clients connect via plex.tv or the Mac's IP. No /dev/dri on macOS, so
+# transcoding is CPU-only; prefer direct play.
+
 services:
   plex:
     image: lscr.io/linuxserver/plex:latest
     container_name: plex
-    # Host mode is recommended by LinuxServer.io and Plex for autodiscovery / DLNA.
-    # Note: this means Plex binds every port it wants on the host (32400, 1900,
-    # 3005, 5353, 8324, 32410, 32412-32414, 32469). Switch to bridge mode + an
-    # explicit ports: list if you need that isolation, at the cost of autodiscovery.
-    network_mode: host
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Los_Angeles
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
       - VERSION=docker
       # PLEX_CLAIM token is only needed on first run and expires after 4 minutes.
       # Get one at https://plex.tv/claim. Leave blank on subsequent runs.
-      - PLEX_CLAIM=
-    devices:
-      # Intel QuickSync passthrough. NOTE: Plex requires a Plex Pass subscription
-      # for hardware transcoding; without one, this device does nothing.
-      - /dev/dri:/dev/dri
+      - PLEX_CLAIM=${PLEX_CLAIM}
     volumes:
-      - ./plex:/config
-      - /data:/data
+      - ${CONFIG_ROOT}/plex:/config
+      - ${DATA_ROOT}:/data
+    ports:
+      - 32400:32400
     restart: unless-stopped
 
   tautulli:
     image: lscr.io/linuxserver/tautulli:latest
     container_name: tautulli
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Los_Angeles
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     volumes:
-      - ./tautulli:/config
+      - ${CONFIG_ROOT}/tautulli:/config
     ports:
       - 8181:8181
     restart: unless-stopped

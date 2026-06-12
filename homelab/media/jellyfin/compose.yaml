@@ -1,23 +1,22 @@
+# Jellyfin + Jellystat, adapted for Docker Desktop on macOS.
+# No /dev/dri on macOS, so transcoding is CPU-only; prefer direct play.
+# DLNA port 1900/udp is dropped to avoid clashing with other services.
+
 services:
   jellyfin:
     image: lscr.io/linuxserver/jellyfin:latest
     container_name: jellyfin
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Los_Angeles
-      - JELLYFIN_PublishedServerUrl=http://10.0.0.101 #optional
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     volumes:
-      - ./config:/config
-      - /data:/data
-    devices:
-      - /dev/dri:/dev/dri #Use for Intel QuickSync
+      - ${CONFIG_ROOT}/config:/config
+      - ${DATA_ROOT}:/data
     ports:
       - 8096:8096
-      - 7359:7359/udp #Service Discovery
-      - 1900:1900/udp #Client Discovery
+      - 7359:7359/udp # Service Discovery
     restart: unless-stopped
-# Remove the Jellyfin service if installed directly on system.
 
   jellystat-db:
     image: postgres:18.1
@@ -25,12 +24,13 @@ services:
     restart: unless-stopped
     shm_size: '1gb'
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: mypassword # CHANGE ME
+      POSTGRES_USER: ${JELLYSTAT_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${JELLYSTAT_POSTGRES_PASSWORD}
     volumes:
-      - ./jellystat/postgres-data:/var/lib/postgresql/data
+      # postgres:18+ expects the mount at /var/lib/postgresql (not .../data)
+      - ${CONFIG_ROOT}/jellystat/postgres-data:/var/lib/postgresql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready --dbname=postgres --username=postgres"]
+      test: ["CMD-SHELL", "pg_isready --dbname=postgres --username=${JELLYSTAT_POSTGRES_USER}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -40,14 +40,14 @@ services:
     container_name: jellystat
     restart: unless-stopped
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: mypassword # must match jellystat-db
+      POSTGRES_USER: ${JELLYSTAT_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${JELLYSTAT_POSTGRES_PASSWORD}
       POSTGRES_IP: jellystat-db
       POSTGRES_PORT: 5432
-      JWT_SECRET: "my-secret-jwt-key" # CHANGE ME
-      TZ: America/Los_Angeles
+      JWT_SECRET: ${JELLYSTAT_JWT_SECRET}
+      TZ: ${TZ}
     volumes:
-      - ./jellystat/backup-data:/app/backend/backup-data
+      - ${CONFIG_ROOT}/jellystat/backup-data:/app/backend/backup-data
     ports:
       - "3000:3000"
     depends_on:
