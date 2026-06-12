@@ -59,7 +59,7 @@ services:
     volumes:
       - jellystat-backup:/app/backend/backup-data
     ports:
-      - "3003:3000"
+      - "30003:3000"
     depends_on:
       jellystat-db:
         condition: service_healthy
