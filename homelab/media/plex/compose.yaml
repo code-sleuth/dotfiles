@@ -3,6 +3,14 @@
 # unreliable under Docker Desktop). DLNA/autodiscovery ports are skipped —
 # clients connect via plex.tv or the Mac's IP. No /dev/dri on macOS, so
 # transcoding is CPU-only; prefer direct play.
+# Configs use named volumes, NOT host bind mounts: SQLite databases corrupt
+# on Docker Desktop's VirtioFS file sharing.
+
+volumes:
+  plex-config:
+    external: true
+  tautulli-config:
+    external: true
 
 services:
   plex:
@@ -17,7 +25,7 @@ services:
       # Get one at https://plex.tv/claim. Leave blank on subsequent runs.
       - PLEX_CLAIM=${PLEX_CLAIM}
     volumes:
-      - ${CONFIG_ROOT}/plex:/config
+      - plex-config:/config
       - ${DATA_ROOT}:/data
     ports:
       - 32400:32400
@@ -31,7 +39,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${CONFIG_ROOT}/tautulli:/config
+      - tautulli-config:/config
     ports:
       - 8181:8181
     restart: unless-stopped

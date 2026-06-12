@@ -1,11 +1,30 @@
 # Compose file for the *arr stack, adapted for Docker Desktop on macOS.
-# App configs live on the internal disk (CONFIG_ROOT) and media/downloads
-# on the external 980 drive (DATA_ROOT) — both set in the .env file.
+# App configs live in named Docker volumes (bind mounts corrupt SQLite on
+# Docker Desktop VirtioFS); media/downloads are on the external 980 drive
+# (DATA_ROOT, set in the .env file).
 # Runs WITHOUT a VPN: gluetun/deunhealth are removed and the download
 # clients and indexers sit directly on servarrnetwork with their own IPs.
 # All containers are ran with user and group ids of the main user and
 # group to avoid permissions issues of downloaded files, please refer
 # the read me file for more information.
+
+volumes:
+  sonarr-config:
+    external: true
+  radarr-config:
+    external: true
+  lidarr-config:
+    external: true
+  bazarr-config:
+    external: true
+  prowlarr-config:
+    external: true
+  qbittorrent-config:
+    external: true
+  nzbget-config:
+    external: true
+  seerr-config:
+    external: true
 
 networks:
   servarrnetwork:
@@ -26,7 +45,7 @@ services:
       - WEBUI_PORT=8080
       - TORRENTING_PORT=6881
     volumes:
-      - ${CONFIG_ROOT}/qbittorrent:/config
+      - qbittorrent-config:/config
       - ${DATA_ROOT}:/data
     ports:
       - 8080:8080
@@ -44,7 +63,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${CONFIG_ROOT}/nzbget:/config
+      - nzbget-config:/config
       - ${DATA_ROOT}:/data
     ports:
       - 6789:6789
@@ -61,7 +80,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${CONFIG_ROOT}/prowlarr:/config
+      - prowlarr-config:/config
     ports:
       - 9696:9696
     restart: unless-stopped
@@ -93,7 +112,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${CONFIG_ROOT}/sonarr:/config
+      - sonarr-config:/config
       - ${DATA_ROOT}:/data
     ports:
       - 8989:8989
@@ -110,7 +129,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${CONFIG_ROOT}/radarr:/config
+      - radarr-config:/config
       - ${DATA_ROOT}:/data
     ports:
       - 7878:7878
@@ -123,7 +142,7 @@ services:
     image: lscr.io/linuxserver/lidarr:latest
     restart: unless-stopped
     volumes:
-      - ${CONFIG_ROOT}/lidarr:/config
+      - lidarr-config:/config
       - ${DATA_ROOT}:/data
     environment:
       - PUID=${PUID}
@@ -144,7 +163,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${CONFIG_ROOT}/bazarr:/config
+      - bazarr-config:/config
       - ${DATA_ROOT}:/data
     ports:
       - 6767:6767
@@ -168,7 +187,7 @@ services:
       retries: 3
     restart: unless-stopped
     volumes:
-      - ${CONFIG_ROOT}/seerr:/app/config
+      - seerr-config:/app/config
     ports:
       - 5055:5055
     networks:

@@ -2,6 +2,14 @@
 # No /dev/dri on macOS, so transcoding is CPU-only; prefer direct play.
 # DLNA port 1900/udp is dropped to avoid clashing with other services.
 
+volumes:
+  jellyfin-config:
+    external: true
+  jellystat-db-data:
+    external: true
+  jellystat-backup:
+    external: true
+
 services:
   jellyfin:
     image: lscr.io/linuxserver/jellyfin:latest
@@ -13,7 +21,7 @@ services:
       # Address advertised to client apps on the LAN (autodiscovery via 7359/udp)
       - JELLYFIN_PublishedServerUrl=http://${LAN_IP}:8096
     volumes:
-      - ${CONFIG_ROOT}/config:/config
+      - jellyfin-config:/config
       - ${DATA_ROOT}:/data
     ports:
       - 8096:8096
@@ -30,7 +38,7 @@ services:
       POSTGRES_PASSWORD: ${JELLYSTAT_POSTGRES_PASSWORD}
     volumes:
       # postgres:18+ expects the mount at /var/lib/postgresql (not .../data)
-      - ${CONFIG_ROOT}/jellystat/postgres-data:/var/lib/postgresql
+      - jellystat-db-data:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready --dbname=postgres --username=${JELLYSTAT_POSTGRES_USER}"]
       interval: 10s
@@ -49,7 +57,7 @@ services:
       JWT_SECRET: ${JELLYSTAT_JWT_SECRET}
       TZ: ${TZ}
     volumes:
-      - ${CONFIG_ROOT}/jellystat/backup-data:/app/backend/backup-data
+      - jellystat-backup:/app/backend/backup-data
     ports:
       - "3000:3000"
     depends_on:
