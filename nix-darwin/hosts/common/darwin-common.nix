@@ -196,7 +196,7 @@ in
       "libusb"
 
       # Custom taps and formulae
-      "felixkratz/formulae/sketchybar"
+      # "felixkratz/formulae/sketchybar"
       "filosottile/musl-cross/musl-cross"
       "messense/macos-cross-toolchains/aarch64-unknown-linux-gnu"
       "messense/macos-cross-toolchains/x86_64-unknown-linux-gnu"
@@ -206,7 +206,7 @@ in
     ];
 
     taps = [
-      "felixkratz/formulae"
+      # "felixkratz/formulae"
       "filosottile/musl-cross"
       "libsql/sqld"
       "messense/macos-cross-toolchains"

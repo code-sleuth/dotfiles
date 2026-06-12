@@ -16,6 +16,11 @@ in
       fish = prev.fish.overrideAttrs (oldAttrs: {
         doCheck = false;
       });
+      # helm 4.x moved tests from cmd/helm/ to pkg/cmd/; the nixpkgs 4.2.0
+      # preCheck still patches the old paths and fails
+      kubernetes-helm = prev.kubernetes-helm.overrideAttrs (oldAttrs: {
+        doCheck = false;
+      });
       direnv = prev.direnv.overrideAttrs (oldAttrs: {
         env = (oldAttrs.env or {}) // { CGO_ENABLED = "1"; };
       });
