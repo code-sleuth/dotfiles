@@ -149,6 +149,8 @@ in
       "zoom"
       "ngrok"
       "cmux"
+      "drawio"
+      "supacode"
       # "f/textream/textream"
     ];
 
