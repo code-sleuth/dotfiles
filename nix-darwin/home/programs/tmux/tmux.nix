@@ -1,9 +1,18 @@
 # tmux — managed natively by Home Manager (no TPM).
-# Plugins are pulled from the nix store, so they're always present after a
-# rebuild, load deterministically, and skip TPM's ~260ms shell-out on every
-# start/reload. tmux-sensible loads first via `sensibleOnTop`.
+# Plugins come from the nix store and load deterministically. For fast startup
+# only the plugins that affect the initial look/behaviour load synchronously
+# (catppuccin, resurrect, continuum); the key-binding-only plugins load in the
+# background via `run-shell -b` at the end of extraConfig. tmux-sensible is
+# inlined rather than sourced, to skip its ~0.23s of per-option `tmux` forks.
 { pkgs, ... }:
 {
+  # cal.sh: next-meeting widget for the status bar (reads macOS Calendar via
+  # `ical-buddy`). Deployed executable so tmux can run it from a #() segment.
+  xdg.configFile."tmux/scripts/cal.sh" = {
+    source = ../../../../tmux/scripts/cal.sh;
+    executable = true;
+  };
+
   programs.tmux = {
     enable = true;
     prefix = "C-a";
@@ -12,29 +21,12 @@
     historyLimit = 1000000;
     keyMode = "vi";
     terminal = "tmux-256color";
-    sensibleOnTop = true;   # load tmux-sensible defaults at the top
-    focusEvents = true;     # let vim/nvim detect terminal focus (FocusGained)
+    focusEvents = true;      # let vim/nvim detect terminal focus (FocusGained)
+    aggressiveResize = true; # from tmux-sensible
 
+    # Foreground plugins: affect the initial appearance/behaviour, so they
+    # must finish before the first prompt is shown.
     plugins = with pkgs.tmuxPlugins; [
-      yank
-      {
-        plugin = resurrect;
-        extraConfig = "set -g @resurrect-strategy-nvim 'session'";
-      }
-      {
-        # continuum must load after resurrect
-        plugin = continuum;
-        extraConfig = "set -g @continuum-restore 'on'";
-      }
-      tmux-thumbs
-      tmux-fzf
-      {
-        plugin = fzf-tmux-url;
-        extraConfig = ''
-          set -g @fzf-url-fzf-options '-p 60%,30% --prompt="   " --border-label=" Open URL "'
-          set -g @fzf-url-history-limit '2000'
-        '';
-      }
       {
         # catppuccin v2: theme + module text options must be set BEFORE the
         # plugin loads; the status-left/right assembly is done after, in
@@ -52,30 +44,13 @@
         '';
       }
       {
-        plugin = tmux-sessionx;
-        extraConfig = ''
-          set -g @sessionx-bind-zo-new-window 'ctrl-y'
-          set -g @sessionx-auto-accept 'off'
-          set -g @sessionx-custom-paths '/Users/code/dotfiles'
-          set -g @sessionx-bind 'o'
-          set -g @sessionx-x-path '~/dotfiles'
-          set -g @sessionx-window-height '85%'
-          set -g @sessionx-window-width '75%'
-          set -g @sessionx-zoxide-mode 'on'
-          set -g @sessionx-custom-paths-subdirectories 'false'
-          set -g @sessionx-filter-current 'false'
-        '';
+        plugin = resurrect;
+        extraConfig = "set -g @resurrect-strategy-nvim 'session'";
       }
       {
-        plugin = tmux-floax;
-        extraConfig = ''
-          set -g @floax-width '80%'
-          set -g @floax-height '80%'
-          set -g @floax-border-color 'magenta'
-          set -g @floax-text-color 'blue'
-          set -g @floax-bind 'p'
-          set -g @floax-change-path 'true'
-        '';
+        # continuum must load after resurrect
+        plugin = continuum;
+        extraConfig = "set -g @continuum-restore 'on'";
       }
     ];
 
@@ -90,12 +65,29 @@
       set -g pane-border-style 'fg=brightblack,bg=default'
       # set -g mouse on
 
+      # Persistent server: keep it alive after the last session closes, so the
+      # config + plugins load only once per boot and later `tmux` calls attach
+      # to the warm server instantly (the ~0.4s start is paid once).
+      set -s exit-empty off
+
+      # ---- tmux-sensible's extras (inlined to avoid sourcing the plugin) ----
+      set -g display-time 4000       # show status messages for 4s
+      set -g status-interval 5       # refresh status-left/right every 5s
+      bind a last-window
+      bind C-p previous-window
+      bind C-n next-window
+
       # ---- catppuccin status line (built AFTER the plugin has loaded) ----
       set -g status-left-length 100
       set -g status-right-length 100
       set -g status-left "#{E:@catppuccin_status_session}"
       set -g status-right "#{E:@catppuccin_status_directory}"
       set -ag status-right "#{E:@catppuccin_status_date_time}"
+      # next meeting via cal.sh (ical-buddy) — themed peach segment, refreshed
+      # every status-interval. Needs macOS Calendar permission (see notes).
+      set -ag status-right "#[fg=#{@thm_crust},bg=#{@thm_peach}] #($HOME/.config/tmux/scripts/cal.sh) "
+      # due-tasks count (Reminders/To-Dos) — plain segment, empty when none due
+      set -ag status-right "#[bg=default,fg=#{@thm_yellow}] #($HOME/.config/tmux/scripts/cal.sh tasks)"
 
       # ---- key bindings (previously tmux.reset.conf) ----
       bind ^X lock-server
@@ -130,8 +122,39 @@
       bind c kill-pane
       bind x swap-pane -D
       bind S choose-session
+      # prefix+M: popup with the next meeting's details + join link
+      bind M display-popup -w 60% -h 50% -T " 󰤙 meetings " -E "$HOME/.config/tmux/scripts/cal.sh _popupbody"
       bind K send-keys "clear"\; send-keys "Enter"
       bind-key -T copy-mode-vi v send-keys -X begin-selection
+
+      # ---- background-loaded plugins (bind keys only — don't block startup) ----
+      # Options are set synchronously; the plugin scripts then load async via
+      # `run-shell -b`, cutting ~0.7s off server start. Their keys bind a
+      # fraction of a second after start — imperceptible in normal use.
+      set -g @fzf-url-fzf-options '-p 60%,30% --prompt="   " --border-label=" Open URL "'
+      set -g @fzf-url-history-limit '2000'
+      set -g @sessionx-bind-zo-new-window 'ctrl-y'
+      set -g @sessionx-auto-accept 'off'
+      set -g @sessionx-custom-paths '/Users/code/dotfiles'
+      set -g @sessionx-bind 'o'
+      set -g @sessionx-x-path '~/dotfiles'
+      set -g @sessionx-window-height '85%'
+      set -g @sessionx-window-width '75%'
+      set -g @sessionx-zoxide-mode 'on'
+      set -g @sessionx-custom-paths-subdirectories 'false'
+      set -g @sessionx-filter-current 'false'
+      set -g @floax-width '80%'
+      set -g @floax-height '80%'
+      set -g @floax-border-color 'magenta'
+      set -g @floax-text-color 'blue'
+      set -g @floax-bind 'p'
+      set -g @floax-change-path 'true'
+      run-shell -b ${pkgs.tmuxPlugins.yank.rtp}
+      run-shell -b ${pkgs.tmuxPlugins.tmux-thumbs.rtp}
+      run-shell -b ${pkgs.tmuxPlugins.tmux-fzf.rtp}
+      run-shell -b ${pkgs.tmuxPlugins.fzf-tmux-url.rtp}
+      run-shell -b ${pkgs.tmuxPlugins.tmux-sessionx.rtp}
+      run-shell -b ${pkgs.tmuxPlugins.tmux-floax.rtp}
     '';
   };
 }
