@@ -201,7 +201,15 @@ if command -v carapace >/dev/null 2>&1; then
   source <(carapace _carapace zsh)
 fi
 if command -v hermes >/dev/null 2>&1; then
-  eval "$(hermes completion zsh)"
+  # hermes completion takes ~180ms to generate; cache it, regenerating only
+  # when the hermes binary is newer than the cache.
+  _hermes_cache="$HOME/.cache/zsh/hermes-completion.zsh"
+  if [[ ! -s "$_hermes_cache" || "$(command -v hermes)" -nt "$_hermes_cache" ]]; then
+    mkdir -p "${_hermes_cache:h}"
+    hermes completion zsh > "$_hermes_cache"
+  fi
+  source "$_hermes_cache"
+  unset _hermes_cache
 fi
 
 # fzf-tab: replaces zsh's default completion menu with an fzf picker

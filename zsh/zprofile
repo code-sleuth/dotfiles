@@ -62,8 +62,14 @@ unset DEBUGINFOD_URLS
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# Put the latest installed node on PATH cheaply. Sourcing nvm.sh here costs
+# ~0.7s on every login shell (and tmux panes are login shells); nvm itself is
+# lazy-loaded in ~/.zshrc for interactive use.
+if [ -d "$NVM_DIR/versions/node" ]; then
+  _node="$(command ls -t "$NVM_DIR/versions/node" 2>/dev/null | head -1)"
+  [ -n "$_node" ] && export PATH="$NVM_DIR/versions/node/$_node/bin:$PATH"
+  unset _node
+fi
 
 
 # Added by Toolbox App
