@@ -50,8 +50,13 @@ in
     ];
   };
 
-  # Add ability to used TouchID for sudo authentication
-  security.pam.services.sudo_local.touchIdAuth = true;
+  # Use TouchID for sudo authentication. `reattach` re-attaches sudo to the
+  # GUI (Aqua) login session so TouchID also works inside tmux/screen, whose
+  # server is detached from that session.
+  security.pam.services.sudo_local = {
+    touchIdAuth = true;
+    reattach = true;
+  };
 
   # System activation scripts
   system.activationScripts = {
