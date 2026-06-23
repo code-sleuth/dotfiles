@@ -1,3 +1,10 @@
+# Interactive shells only. Some GUI apps (e.g. Supacode) force-source ~/.zshrc in a
+# NON-interactive shell to resolve CLIs like `gh` (via `zsh -lc '. ~/.zshrc; exec "$@"'`).
+# The interactive setup below (oh-my-zsh, compinit, carapace, fzf-tab, zsh-syntax-highlighting)
+# clobbers $@ / exits the shell before the app's `exec "$@"`, so the app reports "gh not found".
+# Bail out early when non-interactive — login PATH (incl. /opt/homebrew/bin) comes from ~/.zprofile.
+[[ -o interactive ]] || return
+
 export ZSH="$HOME/.oh-my-zsh"
 export GPG_TTY=$(tty)
 ZSH_THEME="robbyrussell"

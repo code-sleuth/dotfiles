@@ -199,22 +199,21 @@ in
 
       # Custom taps and formulae
       # "felixkratz/formulae/sketchybar"
-      "filosottile/musl-cross/musl-cross"
-      "messense/macos-cross-toolchains/aarch64-unknown-linux-gnu"
-      "messense/macos-cross-toolchains/x86_64-unknown-linux-gnu"
-      "riscv/riscv/riscv-gnu-toolchain"
-      "riscv/riscv/riscv-tools"
-      "tursodatabase/tap/turso"
+      # Untrusted third-party taps — uninstalled & commented out (supply-chain). Re-enable knowingly.
+      # "filosottile/musl-cross/musl-cross"
+      # "messense/macos-cross-toolchains/aarch64-unknown-linux-gnu"
+      # "messense/macos-cross-toolchains/x86_64-unknown-linux-gnu"
+      # "riscv/riscv/riscv-gnu-toolchain"   # untrusted tap — uninstalled; OS project will wire up a trusted toolchain
+      # "riscv/riscv/riscv-tools"           # untrusted tap — uninstalled (spike/pk; xv6 runs on qemu anyway)
+      # turso: removed (untrusted tap). Run via Docker if needed.
     ];
 
     taps = [
       # "felixkratz/formulae"
-      "filosottile/musl-cross"
-      "libsql/sqld"
-      "messense/macos-cross-toolchains"
+      # "filosottile/musl-cross"          # untrusted tap — removed
+      # "messense/macos-cross-toolchains" # untrusted tap — removed
       "nikitabobko/tap"
-      "riscv/riscv"
-      "tursodatabase/tap"
+      # "riscv/riscv"   # untrusted tap — removed (OS toolchain TBD)
     ];
   };
 
