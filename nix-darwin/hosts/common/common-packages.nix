@@ -51,7 +51,6 @@ in
     starship
     atuin
     zoxide
-    tmux
 
     # Text Processing & Search
     bat

@@ -7,6 +7,8 @@
   ...
 }:
 {
+  imports = [ ./programs ];
+
   home.stateVersion = "23.05";
 
   # User-specific packages that shouldn't be available system-wide
@@ -181,14 +183,4 @@
     $DRY_RUN_CMD ${pkgs.atuin}/bin/atuin init nu > "$HOME/.cache/atuin/init.nu"
   '';
 
-  # Copy (not symlink) tmux config to allow TPM to install plugins
-  home.activation.copyTmuxConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    $DRY_RUN_CMD rm -rf "$HOME/.config/tmux"
-    $DRY_RUN_CMD mkdir -p "$HOME/.config/tmux/plugins"
-    $DRY_RUN_CMD cp -r "$HOME/dotfiles/tmux"/* "$HOME/.config/tmux/"
-    $DRY_RUN_CMD chmod -R u+w "$HOME/.config/tmux"
-    if $DRY_RUN_CMD ${pkgs.tmux}/bin/tmux list-sessions >/dev/null 2>&1; then
-      $DRY_RUN_CMD ${pkgs.tmux}/bin/tmux source-file "$HOME/.config/tmux/tmux.conf" || true
-    fi
-  '';
 }
