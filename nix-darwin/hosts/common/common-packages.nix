@@ -166,6 +166,7 @@ in
     dbmate
 
     # GUI Applications
+    aerospace # tiling window manager (was the nikitabobko/tap cask)
     alacritty
     wezterm
     raycast

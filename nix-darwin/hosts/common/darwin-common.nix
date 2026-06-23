@@ -128,7 +128,7 @@ in
 
     casks = [
       # GUI apps that are better managed through homebrew or unavailable in nix
-      "aerospace" # Tiling window manager for macOS
+      # "aerospace" — moved to nixpkgs (pkgs.aerospace); nikitabobko/tap was untrusted
       "docker-desktop" # Docker Desktop
       "stats" # macOS system monitor (not in nix)
       "google-chrome" # chrome
@@ -186,6 +186,7 @@ in
 
       # Specialized tools not readily available in nix
       "geni" # Network emulator
+      "ical-buddy" # reads macOS Calendar for the tmux meeting widget (not in nixpkgs)
 
       # RISC-V development tools
       "riscv64-elf-binutils"
@@ -217,7 +218,7 @@ in
       # "felixkratz/formulae"
       # "filosottile/musl-cross"          # untrusted tap — removed
       # "messense/macos-cross-toolchains" # untrusted tap — removed
-      "nikitabobko/tap"
+      # "nikitabobko/tap"  # untrusted tap — removed (aerospace moved to nixpkgs)
       # "riscv/riscv"   # untrusted tap — removed (OS toolchain TBD)
     ];
   };
