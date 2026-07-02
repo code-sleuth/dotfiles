@@ -155,7 +155,7 @@ in
       "ngrok"
       "cmux"
       "drawio"
-      "supacode"
+      # "supacode"
       # "f/textream/textream"
     ];
 
