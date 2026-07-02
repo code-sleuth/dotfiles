@@ -4,5 +4,6 @@
 {
   imports = [
     ./tmux/tmux.nix
+    ./helix/helix.nix
   ];
 }
