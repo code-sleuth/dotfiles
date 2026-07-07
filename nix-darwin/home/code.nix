@@ -58,10 +58,6 @@
       source = ../../git;
       enable = true;
     };
-    ".config/bat" = {
-      source = ../../bat;
-      enable = true;
-    };
     ".config/atuin" = {
       source = ../../atuin;
       enable = true;

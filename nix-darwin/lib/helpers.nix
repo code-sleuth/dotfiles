@@ -13,6 +13,7 @@
     let
       inherit (inputs.nixpkgs) lib;
       unstablePkgs = inputs.nixpkgs-unstable.legacyPackages.${system};
+      masterPkgs = inputs.nixpkgs-master.legacyPackages.${system};
       customConfPath = ./../hosts/darwin/${hostname};
       customConf = if builtins.pathExists customConfPath then (customConfPath + "/default.nix") else null;
     in
@@ -23,6 +24,7 @@
           inputs
           username
           unstablePkgs
+          masterPkgs
           ;
       };
       modules = [
