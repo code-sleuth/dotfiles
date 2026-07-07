@@ -1,0 +1,177 @@
+#!/usr/bin/env python3
+"""
+pi-sync-models — regenerate ~/dotfiles/pi/agent/models.json from LM Studio.
+
+The `pi` coding agent has no dynamic model discovery: every model must be
+listed explicitly in models.json. This queries LM Studio's native API
+(/api/v0/models), keeps the generative models (llm/vlm), drops embeddings,
+and writes a pi-schema models.json so `pi --list-models lmstudio` shows
+exactly what you have in LM Studio — with correct IDs every time.
+
+Non-destructive: models already in the file keep their fields verbatim (so any
+per-model tuning you do by hand — reasoning on/off, a contextWindow pinned
+lower for RAM — survives). Only newly downloaded models are seeded from LM
+Studio's facts; models you've deleted from LM Studio are dropped. To re-seed an
+existing model from scratch, delete its block and re-run.
+
+The file it writes is home-manager managed, so apply with:
+    cd ~/dotfiles/nix-darwin && just switch
+
+Usage:
+    pi-sync-models              write models.json + print a summary
+    pi-sync-models --dry-run    print the JSON to stdout, write nothing
+    pi-sync-models --force      write even if LM Studio reports no chat models
+
+Fail-safe: if LM Studio isn't running, or returns nothing / a non-JSON
+response, the script prints an error, exits non-zero, and leaves models.json
+untouched — so a later `just switch` always deploys your last-good list.
+(`just switch` itself never contacts LM Studio; it only copies the file.)
+
+Env:
+    LMSTUDIO_URL   base URL   (default http://127.0.0.1:1234)
+    DOTFILES       repo root  (default ~/dotfiles)
+"""
+import json
+import os
+import sys
+import urllib.error
+import urllib.request
+
+BASE = os.environ.get("LMSTUDIO_URL", "http://127.0.0.1:1234").rstrip("/")
+DOTFILES = os.environ.get("DOTFILES", os.path.expanduser("~/dotfiles"))
+TARGET = os.path.join(DOTFILES, "pi", "agent", "models.json")
+
+# Best-effort: flag these as reasoning/thinking models so pi exposes --thinking.
+# Case-insensitive substring match against the model id and arch. Edit freely —
+# LM Studio's own `capabilities: ["reasoning"]` (when reported) always wins.
+REASONING_HINTS = (
+    "qwen3", "qwq", "deepseek-r1", "gpt-oss", "magistral",
+    "glm-4.5", "glm-4.6", "glm-z1", "-reasoning", "seed-oss",
+)
+
+
+def fetch_models():
+    url = f"{BASE}/api/v0/models"
+    try:
+        with urllib.request.urlopen(url, timeout=6) as resp:
+            payload = json.load(resp)
+    except OSError as err:  # URLError, ConnectionRefused, timeout, DNS ... all subclass OSError
+        reason = getattr(err, "reason", err)
+        sys.exit(
+            f"error: can't reach LM Studio at {BASE} ({reason}).\n"
+            "       Start its server: LM Studio -> Developer -> Start Server, "
+            "or `lms server start`. models.json left unchanged."
+        )
+    except (json.JSONDecodeError, ValueError) as err:
+        sys.exit(
+            f"error: {url} returned a non-JSON response ({err}). "
+            "Is something other than LM Studio on that port? models.json left unchanged."
+        )
+    if not isinstance(payload, dict) or not isinstance(payload.get("data"), list):
+        sys.exit(f"error: unexpected response shape from {url}. models.json left unchanged.")
+    return payload["data"]
+
+
+def is_reasoning(model):
+    if "reasoning" in (model.get("capabilities") or []):
+        return True
+    hay = f"{model.get('id', '')} {model.get('arch', '')}".lower()
+    return any(hint in hay for hint in REASONING_HINTS)
+
+
+def build_entry(model):
+    entry = {"id": model["id"]}
+    ctx = model.get("max_context_length")
+    if isinstance(ctx, int) and ctx > 0:
+        entry["contextWindow"] = ctx
+    if is_reasoning(model):
+        entry["reasoning"] = True
+    entry["input"] = ["text", "image"] if model.get("type") == "vlm" else ["text"]
+    return entry
+
+
+def load_existing():
+    """Map of id -> existing model block, so hand-tuned fields are preserved."""
+    try:
+        with open(TARGET) as fh:
+            models = json.load(fh)["providers"]["lmstudio"]["models"]
+        return {m["id"]: m for m in models if isinstance(m, dict) and "id" in m}
+    except (FileNotFoundError, KeyError, TypeError, json.JSONDecodeError):
+        return {}
+
+
+def main():
+    raw = fetch_models()
+    existing = load_existing()
+    kept, skipped, added = [], [], []
+    for model in raw:
+        if model.get("type") not in ("llm", "vlm"):
+            skipped.append((model.get("id"), model.get("type")))
+            continue
+        mid = model["id"]
+        if mid in existing:
+            entry = existing[mid]  # preserve hand-tuned fields verbatim
+        else:
+            entry = build_entry(model)
+            added.append(mid)
+        kept.append((model, entry))
+
+    kept.sort(key=lambda pair: pair[1]["id"])  # deterministic → clean git diffs
+    config = {
+        "providers": {
+            "lmstudio": {
+                "baseUrl": f"{BASE}/v1",
+                "api": "openai-completions",
+                "apiKey": "lm-studio",
+                "models": [entry for _, entry in kept],
+            }
+        }
+    }
+    out = json.dumps(config, indent=2) + "\n"
+
+    if "--dry-run" in sys.argv[1:]:
+        sys.stdout.write(out)
+        return
+
+    if not kept and "--force" not in sys.argv[1:]:
+        detail = f" (saw only {len(skipped)} embedding/other)" if skipped else ""
+        if existing:
+            sys.exit(
+                f"error: LM Studio reported no chat models{detail}. Keeping the "
+                f"{len(existing)} model(s) already in models.json. "
+                "Load/download a model and re-run, or pass --force to overwrite with an empty list."
+            )
+        sys.exit(f"error: LM Studio reported no chat models{detail}, and there's no existing "
+                 "list to keep. Nothing written.")
+
+    if not os.path.isdir(os.path.dirname(TARGET)):
+        sys.exit(f"error: {os.path.dirname(TARGET)} not found. Set DOTFILES=<repo root>.")
+    with open(TARGET, "w") as fh:
+        fh.write(out)
+
+    added_set = set(added)
+    print(f"wrote {len(kept)} model(s) -> {TARGET}\n")
+    print(f"   {'model':44} {'ctx':>7}  tools  vision  think")
+    for model, entry in kept:
+        caps = model.get("capabilities") or []
+        ctx = entry.get("contextWindow")
+        ctx_str = f"{ctx // 1024}K" if isinstance(ctx, int) else "-"
+        mark = lambda ok: "yes" if ok else "-"  # noqa: E731
+        flag = "+" if entry["id"] in added_set else " "
+        print(
+            f" {flag} {entry['id']:44} {ctx_str:>7}  "
+            f"{mark('tool_use' in caps):>5}  "
+            f"{mark('image' in (entry.get('input') or [])):>6}  "
+            f"{mark(entry.get('reasoning')):>5}"
+        )
+    if added:
+        print(f"\n  + {len(added)} newly added, seeded from LM Studio")
+    if skipped:
+        print("\n  skipped (not a chat model):")
+        for sid, stype in skipped:
+            print(f"    - {sid}  ({stype})")
+    print("\napply with:  cd ~/dotfiles/nix-darwin && just switch")
+
+
+if __name__ == "__main__":
+    main()
