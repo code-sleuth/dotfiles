@@ -5,5 +5,6 @@
   imports = [
     ./tmux/tmux.nix
     ./helix/helix.nix
+    ./bat/bat.nix
   ];
 }
