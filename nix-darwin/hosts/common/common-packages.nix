@@ -2,6 +2,7 @@
   inputs,
   pkgs,
   unstablePkgs,
+  masterPkgs,
   ...
 }:
 let
@@ -53,7 +54,7 @@ in
     zoxide
 
     # Text Processing & Search
-    bat
+    # bat is managed by home-manager (programs.bat) so it can build the theme cache
     eza
     fd
     fzf
@@ -64,6 +65,13 @@ in
     # Development Editors & IDEs
     vim
     neovim
+    # Agent & Session Multiplexers
+    # Pulled from nixpkgs master: the darwin build fix (cctools/xcbuild for the
+    # vendored libghostty-vt zig build) hasn't reached the unstable channel yet.
+    # Tracks the latest herdr release automatically; move back to plain `herdr`
+    # once the channel catches up. (github.com/ogulcancelik/herdr)
+    masterPkgs.herdr
+
     # Version Control & Collaboration
     lazygit
     gh

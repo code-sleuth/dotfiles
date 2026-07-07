@@ -318,28 +318,4 @@ in
     # Prevent Photos from opening automatically when devices are plugged in
     "com.apple.ImageCapture".disableHotPlug = true;
   };
-
-  # Hermes Agent Telegram gateway — launchd user agent
-  launchd.user.agents.hermes-gateway = {
-    serviceConfig = {
-      ProgramArguments = [
-        "/Users/${username}/.hermes/hermes-agent/venv/bin/python"
-        "-m"
-        "hermes_cli.main"
-        "gateway"
-        "run"
-        "--replace"
-      ];
-      WorkingDirectory = "/Users/${username}/.hermes/hermes-agent";
-      EnvironmentVariables = {
-        HERMES_HOME = "/Users/${username}/.hermes";
-        VIRTUAL_ENV = "/Users/${username}/.hermes/hermes-agent/venv";
-        PATH = "/Users/${username}/.hermes/hermes-agent/venv/bin:/Users/${username}/.hermes/hermes-agent/node_modules/.bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/run/current-system/sw/bin:/Users/${username}/.nix-profile/bin:/etc/profiles/per-user/${username}/bin:/nix/var/nix/profiles/default/bin";
-      };
-      RunAtLoad = true;
-      KeepAlive = true;
-      StandardOutPath = "/Users/${username}/.hermes/logs/gateway.log";
-      StandardErrorPath = "/Users/${username}/.hermes/logs/gateway.error.log";
-    };
-  };
 }
