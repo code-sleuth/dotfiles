@@ -90,6 +90,10 @@ alias ping='ping -4A'
 alias -g p='2>&1 | less'
 alias sudo='sudo '  # allow aliases with sudo
 
+# Aliases: pi (local LLMs via LM Studio)
+alias pil="pi --provider lmstudio --models 'lmstudio/*'"  # launch pi on LM Studio, Ctrl+P cycles local models
+alias pi-sync="~/.config/scripts/pi-sync-models"          # regenerate pi/agent/models.json from LM Studio
+
 # Aliases: ledger
 alias lg='ledger'
 alias lga='ledger accounts'
@@ -200,17 +204,6 @@ zstyle ':completion:*:git-checkout:*' sort false
 if command -v carapace >/dev/null 2>&1; then
   source <(carapace _carapace zsh)
 fi
-if command -v hermes >/dev/null 2>&1; then
-  # hermes completion takes ~180ms to generate; cache it, regenerating only
-  # when the hermes binary is newer than the cache.
-  _hermes_cache="$HOME/.cache/zsh/hermes-completion.zsh"
-  if [[ ! -s "$_hermes_cache" || "$(command -v hermes)" -nt "$_hermes_cache" ]]; then
-    mkdir -p "${_hermes_cache:h}"
-    hermes completion zsh > "$_hermes_cache"
-  fi
-  source "$_hermes_cache"
-  unset _hermes_cache
-fi
 
 # fzf-tab: replaces zsh's default completion menu with an fzf picker
 # (gives the same arrow/j/k/Tab navigation experience as nushell's completion_menu)
@@ -284,14 +277,15 @@ _fzf_compgen_dir() {
 }
 
 # ----- Bat (better cat) -----
-export BAT_THEME=tokyonight_night
+# bat's theme (rose-pine) and style (full) are managed declaratively via
+# home-manager's programs.bat — see nix-darwin/home/code.nix. Don't re-add
+# BAT_THEME/BAT_STYLE here; env vars override and drift from the nix config.
 
 show_file_or_dir_preview="if [ -d {} ]; then eza --tree --color=always {} | head -200; else bat -n --color=always --line-range :500 {}; fi"
 
 export FZF_CTRL_T_OPTS="--preview '$show_file_or_dir_preview'"
 export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
 
-export BAT_STYLE=full
 # export FZF_GIT_CAT=bat --style=$BAT_STYLE --color=$FZF_GIT_COLOR
 export FZF_GIT_COLOR=always
 export FZF_GIT_PAGER=$(git config --get core.pager)
