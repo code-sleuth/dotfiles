@@ -1,8 +1,9 @@
 # helix — managed natively by Home Manager, pulled from nixpkgs-unstable for a
 # recent release while the rest of the system tracks stable 24.11 (unstable is
 # already an input, so this reuses cache.nixos.org — no source compile).
-# Starter config: catppuccin mocha (matches tmux), relative line numbers,
-# format-on-save, and language servers for the toolchains already in this config.
+# Starter config: rose_pine theme (a built-in helix theme; no runtime file
+# needed), relative line numbers, format-on-save, and language servers for the
+# toolchains already in this config.
 { pkgs, unstablePkgs, ... }:
 {
   # gopls isn't in common-packages; bring it in so the Go LSP resolves. nixd is
@@ -17,7 +18,7 @@
 
     # -> ~/.config/helix/config.toml
     settings = {
-      theme = "catppuccin_mocha";
+      theme = "rose_pine";
 
       editor = {
         line-number = "relative";
