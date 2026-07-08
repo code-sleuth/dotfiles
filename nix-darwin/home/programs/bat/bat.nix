@@ -14,6 +14,14 @@
     config = {
       theme = "rose-pine";
       style = "full";
+
+      # Pager: quit if the output fits one screen (-F) so short files print
+      # inline like `cat` instead of taking over the terminal, and reset the
+      # global `LESS=-c` (clear-screen) with `-+c` — that flag repaints the whole
+      # screen with `~` filler and leaves it behind on quit. `-R` keeps colors.
+      # Scoped to bat only; the global LESS (see zsh/zprofile) is untouched, so
+      # git/man keep their `-c`.
+      pager = "less -RF -+c";
     };
 
     # bat derives the theme name from the file name (rose-pine.tmTheme ->
