@@ -94,7 +94,6 @@ in
 
     # Rust Development Tools
     cargo-audit
-    cargo-watch
     cargo-expand
     cargo-edit
     cargo-cache
