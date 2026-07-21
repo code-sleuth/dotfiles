@@ -119,8 +119,6 @@ in
     kubernetes-helm
     kind
 
-    # Cloud & Infrastructure
-    awscli
     eksctl
 
     # DevOps & Automation

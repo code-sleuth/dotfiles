@@ -179,6 +179,7 @@ in
       "cocoapods"
 
       # Tools that may need homebrew versions for compatibility
+      "awscli"
       "nvm" # Node Version Manager
       "opencode"
       # "netbirdio/tap/netbird"
