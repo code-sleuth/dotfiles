@@ -36,7 +36,7 @@ dry-run target_host=hostname:
 # Update flake inputs to their latest revisions
 update:
     @echo "Updating flake inputs..."
-    nix flake update
+    NIX_CONFIG="access-tokens = github.com=$(gh auth token)" nix flake update
 
 # Show flake info
 info:
