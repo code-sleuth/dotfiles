@@ -66,6 +66,7 @@
     mkalias
 
     # GUI Applications
+    aerospace
     raycast
 
     # Fonts
