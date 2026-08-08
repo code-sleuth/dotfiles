@@ -1,10 +1,9 @@
 # Home Manager configuration for user "code"
-{
-  config,
-  inputs,
-  pkgs,
-  lib,
-  ...
+{ config
+, inputs
+, pkgs
+, lib
+, ...
 }:
 {
   imports = [ ./programs ];

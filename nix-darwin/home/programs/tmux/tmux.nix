@@ -21,7 +21,7 @@
     historyLimit = 1000000;
     keyMode = "vi";
     terminal = "tmux-256color";
-    focusEvents = true;      # let vim/nvim detect terminal focus (FocusGained)
+    focusEvents = true; # let vim/nvim detect terminal focus (FocusGained)
     aggressiveResize = true; # from tmux-sensible
 
     # Foreground plugins: affect the initial appearance/behaviour, so they
