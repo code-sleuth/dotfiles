@@ -1,5 +1,7 @@
 { ... }:
 {
+  nix.enable = false;
+
   system.defaults = {
     WindowManager = {
       EnableStandardClickToShowDesktop = false;
