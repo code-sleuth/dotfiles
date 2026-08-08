@@ -29,6 +29,7 @@
     {
       darwinConfigurations = {
         Ibrahims-Thanos = libx.mkDarwin { hostname = "Ibrahims-Thanos"; };
+        Ibrahims-MBP = libx.mkDarwin { hostname = "Ibrahims-MBP"; };
       };
 
       # Expose the package set, including overlays, for convenience.
