@@ -1,4 +1,4 @@
-{ pkgs, masterPkgs, ... }:
+{ pkgs, ... }:
 {
   nixpkgs.overlays = [
     (final: prev: {
@@ -6,13 +6,6 @@
       # preCheck still patches the old paths and fails
       kubernetes-helm = prev.kubernetes-helm.overrideAttrs (oldAttrs: {
         doCheck = false;
-      });
-      bun = prev.bun.overrideAttrs (oldAttrs: rec {
-        version = "1.3.14";
-        src = prev.fetchurl {
-          url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-aarch64.zip";
-          hash = "sha256-2LliIYKK1vl6x6wKt+lYcjQa92MAHogD6CZ2UsJlJiA=";
-        };
       });
     })
   ];
@@ -28,12 +21,6 @@
 
     # Development Editors & IDEs
     vim
-    # Agent & Session Multiplexers
-    # Pulled from nixpkgs master: the darwin build fix (cctools/xcbuild for the
-    # vendored libghostty-vt zig build) hasn't reached the unstable channel yet.
-    # Tracks the latest herdr release automatically; move back to plain `herdr`
-    # once the channel catches up. (github.com/ogulcancelik/herdr)
-    masterPkgs.herdr
 
     # Version Control & Collaboration
     lazygit
@@ -41,13 +28,7 @@
     git-crypt
 
     # Programming Languages & Runtimes
-    rustup # rust-analyzer component must be added: `rustup component add rust-analyzer`
-    go
-    gotools
-    golines
-    golangci-lint
     zig
-    bun
     yarn
     pnpm
     nil # Nix language server
