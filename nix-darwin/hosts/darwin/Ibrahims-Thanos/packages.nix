@@ -1,0 +1,140 @@
+{ pkgs, masterPkgs, ... }:
+{
+  nixpkgs.overlays = [
+    (final: prev: {
+      # helm 4.x moved tests from cmd/helm/ to pkg/cmd/; the nixpkgs 4.2.0
+      # preCheck still patches the old paths and fails
+      kubernetes-helm = prev.kubernetes-helm.overrideAttrs (oldAttrs: {
+        doCheck = false;
+      });
+      bun = prev.bun.overrideAttrs (oldAttrs: rec {
+        version = "1.3.14";
+        src = prev.fetchurl {
+          url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-aarch64.zip";
+          hash = "sha256-2LliIYKK1vl6x6wKt+lYcjQa92MAHogD6CZ2UsJlJiA=";
+        };
+      });
+    })
+  ];
+
+  environment.systemPackages = with pkgs; [
+    # Core System Utilities
+    coreutils
+    gawk
+    gnused
+    watch
+    # flock
+    sshs
+
+    # Development Editors & IDEs
+    vim
+    # Agent & Session Multiplexers
+    # Pulled from nixpkgs master: the darwin build fix (cctools/xcbuild for the
+    # vendored libghostty-vt zig build) hasn't reached the unstable channel yet.
+    # Tracks the latest herdr release automatically; move back to plain `herdr`
+    # once the channel catches up. (github.com/ogulcancelik/herdr)
+    masterPkgs.herdr
+
+    # Version Control & Collaboration
+    lazygit
+    diff-so-fancy
+    git-crypt
+
+    # Programming Languages & Runtimes
+    rustup # rust-analyzer component must be added: `rustup component add rust-analyzer`
+    go
+    gotools
+    golines
+    golangci-lint
+    zig
+    bun
+    yarn
+    pnpm
+    nil # Nix language server
+
+    # Rust Development Tools
+    cargo-audit
+    cargo-expand
+    cargo-edit
+    cargo-cache
+    grcov
+
+    # Build Systems & Compilation
+    #cmake # nix pkg is at v3.31.7, i want v4
+    ninja
+    gnumake
+    binutils
+    act
+
+    # Container & Virtualization
+    podman
+    # podman-desktop
+    podman-compose
+    docker-compose
+    lima
+    qemu
+
+    # Kubernetes & Orchestration
+    kubectl
+    kubernetes-helm
+    kind
+
+    eksctl
+
+    # DevOps & Automation
+    opentofu
+    terraform
+    packer
+    # ansible
+    buildkit
+
+    # Development Services
+    redis
+    protobuf
+
+    # Security & Cryptography
+    pass
+    gnupg
+    pinentry_mac
+    openssl
+
+    # System Monitoring & Analysis
+    btop
+    nmap
+    ipmitool
+    capstone
+
+    # Media & Content Processing
+    ffmpeg
+    imagemagick
+    asciinema
+
+    # Documentation & Reference
+    glow
+    tlrc
+
+    # Productivity & Utilities
+    yazi
+    stow
+    ledger
+    wakatime-cli
+    when
+    uv
+
+    # Web Assembly (WASM)
+    wasm-pack
+    trunk
+
+    # Database Tools
+    dbmate
+
+    # GUI Applications
+    aerospace # tiling window manager (was the nikitabobko/tap cask)
+    alacritty
+    wezterm
+
+    # Fun & Entertainment
+    cmatrix
+    # libusb1
+  ];
+}

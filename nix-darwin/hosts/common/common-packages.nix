@@ -1,13 +1,6 @@
-{
-  inputs,
-  pkgs,
-  unstablePkgs,
-  masterPkgs,
-  ...
+{ pkgs
+, ...
 }:
-let
-  inherit (inputs) nixpkgs nixpkgs-unstable;
-in
 {
   nixpkgs.config.allowUnfree = true;
 
@@ -17,35 +10,13 @@ in
       fish = prev.fish.overrideAttrs (oldAttrs: {
         doCheck = false;
       });
-      # helm 4.x moved tests from cmd/helm/ to pkg/cmd/; the nixpkgs 4.2.0
-      # preCheck still patches the old paths and fails
-      kubernetes-helm = prev.kubernetes-helm.overrideAttrs (oldAttrs: {
-        doCheck = false;
-      });
       direnv = prev.direnv.overrideAttrs (oldAttrs: {
-        env = (oldAttrs.env or {}) // { CGO_ENABLED = "1"; };
-      });
-      bun = prev.bun.overrideAttrs (oldAttrs: rec {
-        version = "1.3.14";
-        src = prev.fetchurl {
-          url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-aarch64.zip";
-          hash = "sha256-2LliIYKK1vl6x6wKt+lYcjQa92MAHogD6CZ2UsJlJiA=";
-        };
+        env = (oldAttrs.env or { }) // { CGO_ENABLED = "1"; };
       });
     })
   ];
 
   environment.systemPackages = with pkgs; [
-    # Core System Utilities
-    coreutils
-    gawk
-    gnused
-    wget
-    watch
-    # flock
-    direnv
-    sshs
-
     # Shell & Terminal Environment
     nushell
     carapace
@@ -62,126 +33,27 @@ in
     tree
     jq
 
-    # Development Editors & IDEs
-    vim
+    # Editors & Language Servers
     neovim
-    # Agent & Session Multiplexers
-    # Pulled from nixpkgs master: the darwin build fix (cctools/xcbuild for the
-    # vendored libghostty-vt zig build) hasn't reached the unstable channel yet.
-    # Tracks the latest herdr release automatically; move back to plain `herdr`
-    # once the channel catches up. (github.com/ogulcancelik/herdr)
-    masterPkgs.herdr
-
-    # Version Control & Collaboration
-    lazygit
-    gh
-    diff-so-fancy
-    git-crypt
-
-    # Programming Languages & Runtimes
-    rustup # rust-analyzer component must be added: `rustup component add rust-analyzer`
-    go
-    gotools
-    golines
-    golangci-lint
-    zig
-    bun
-    yarn
-    pnpm
     nixd # Nix language server
-    nil # Nix language server
     nixpkgs-fmt
 
-    # Rust Development Tools
-    cargo-audit
-    cargo-expand
-    cargo-edit
-    cargo-cache
-    grcov
+    # Core System Utilities
+    wget
+    direnv
 
-    # Build Systems & Compilation
-    #cmake # nix pkg is at v3.31.7, i want v4
-    ninja
-    gnumake
-    binutils
-    act
-
-    # Container & Virtualization
-    podman
-    # podman-desktop
-    podman-compose
-    docker-compose
-    lima
-    qemu
-
-    # Kubernetes & Orchestration
-    kubectl
-    kubernetes-helm
-    kind
-
-    eksctl
-
-    # DevOps & Automation
-    opentofu
-    terraform
-    packer
-    # ansible
-    buildkit
-
-    # Development Services
-    redis
-    protobuf
-
-    # Security & Cryptography
-    pass
-    gnupg
-    pinentry_mac
-    openssl
-
-    # System Monitoring & Analysis
-    btop
-    nmap
-    ipmitool
-    capstone
-
-    # Media & Content Processing
-    ffmpeg
-    imagemagick
-    asciinema
-
-    # Documentation & Reference
-    glow
-    tlrc
+    # Version Control & Collaboration
+    gh
 
     # Productivity & Utilities
     just
-    yazi
-    stow
     mkalias
-    ledger
-    wakatime-cli
-    when
-    uv
-
-    # Web Assembly (WASM)
-    wasm-pack
-    trunk
-
-    # Database Tools
-    dbmate
 
     # GUI Applications
-    aerospace # tiling window manager (was the nikitabobko/tap cask)
-    alacritty
-    wezterm
     raycast
 
     # Fonts
     nerd-fonts.hack
     nerd-fonts.jetbrains-mono
-
-    # Fun & Entertainment
-    cmatrix
-    # libusb1
   ];
 }
