@@ -85,6 +85,10 @@
       source = ../../zed/settings.json;
       enable = true;
     };
+    ".config/zed/keymap.json" = {
+      source = ../../zed/keymap.json;
+      enable = true;
+    };
     ".config/cmux/settings.json" = {
       source = ../../cmux/settings.json;
       enable = true;
