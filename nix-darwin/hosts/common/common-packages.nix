@@ -61,6 +61,10 @@
     # Version Control & Collaboration
     gh
 
+    # Security & Cryptography
+    gnupg
+    pinentry_mac
+
     # Productivity & Utilities
     just
     mkalias

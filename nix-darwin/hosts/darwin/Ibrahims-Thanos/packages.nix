@@ -75,8 +75,6 @@
 
     # Security & Cryptography
     pass
-    gnupg
-    pinentry_mac
     openssl
 
     # System Monitoring & Analysis
