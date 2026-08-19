@@ -67,14 +67,13 @@
     },
     "gopls": {
       "binary": {
-        "path": "/Users/code/go/bin/gopls",
+        "path": "/etc/profiles/per-user/code/bin/gopls",
         "arguments": [],
         "env": {
-          "PATH": "/run/current-system/sw/bin:/Users/code/go/bin:/usr/local/bin:/usr/bin:/bin"
+          "PATH": "/etc/profiles/per-user/code/bin:/run/current-system/sw/bin:/Users/code/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin"
         }
       },
       "initialization_options": {
-        "buildFlags": ["-tags=gopls"],
         "hoverKind": "FullDocumentation",
         "analyses": {
           "shadow": true
