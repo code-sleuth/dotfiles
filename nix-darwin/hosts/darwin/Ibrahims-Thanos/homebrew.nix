@@ -22,7 +22,6 @@
       # "netbirdio/tap/netbird-ui"
       "obs"
       "zoom"
-      "ngrok"
       "cmux"
       "drawio"
       # "supacode"
