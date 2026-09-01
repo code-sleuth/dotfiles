@@ -36,6 +36,7 @@ node_modules
 .claude
 **/.claude/settings.local.json
 CLAUDE.md
+**/docs/agents/
 
 # Rust specific
 target/
