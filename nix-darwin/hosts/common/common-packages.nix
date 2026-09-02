@@ -15,10 +15,10 @@
         env = (oldAttrs.env or { }) // { CGO_ENABLED = "1"; };
       });
       bun = prev.bun.overrideAttrs (oldAttrs: rec {
-        version = "1.3.14";
+        version = "1.4.0";
         src = prev.fetchurl {
           url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-aarch64.zip";
-          hash = "sha256-2LliIYKK1vl6x6wKt+lYcjQa92MAHogD6CZ2UsJlJiA=";
+          hash = "sha256-xmnpf2Fk4cluBwF0jbmN+ndJKQjL2DlMdVcTSnNd44E=";
         };
       });
     })
