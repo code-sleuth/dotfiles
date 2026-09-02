@@ -125,6 +125,7 @@
       "ghostty"
       "zed" # Code editor
       "zen" # Zen Browser
+      "coderabbit"
     ];
 
     brews = [
