@@ -72,6 +72,7 @@
     # GUI Applications
     aerospace
     raycast
+    google-chrome
 
     # Fonts
     nerd-fonts.hack
