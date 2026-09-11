@@ -18,6 +18,12 @@
     pkgs.nushell
   ];
 
+  # The archify skill probes only /Applications for Chrome, and nix-darwin installs it as a
+  # Finder alias under "Nix Apps" that a shell cannot traverse. Point it at the CLI wrapper.
+  environment.variables = {
+    ARCHIFY_CHROME = "/run/current-system/sw/bin/google-chrome";
+  };
+
   nix = {
     settings = {
       experimental-features = "nix-command flakes";
