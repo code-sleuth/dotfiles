@@ -114,6 +114,14 @@
       source = ../../btop;
       enable = true;
     };
+    "Library/Preferences/pnpm/config.yaml" = {
+      source = ../../pnpm/config.yaml;
+      enable = true;
+    };
+    ".bunfig.toml" = {
+      source = ../../bun/bunfig.toml;
+      enable = true;
+    };
     ".pi/agent/models.json" = {
       source = ../../pi/agent/models.json;
       enable = true;
