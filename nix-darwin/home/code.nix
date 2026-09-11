@@ -13,7 +13,7 @@
   # User-specific packages that shouldn't be available system-wide
   home.packages = with pkgs; [
     # Add any user-specific packages here
-    nodejs_24
+    nodejs-slim_24
   ];
 
   # Dotfile management through Home Manager
