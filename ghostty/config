@@ -3,7 +3,6 @@ config-file = themes/rosepine
 
 #background = #000000
 background-opacity = 0.75
-background-blur-radius = 23
 
 font-family = "JetBrainsMono Nerd Font"
 font-style = Regular
