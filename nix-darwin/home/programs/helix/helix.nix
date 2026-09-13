@@ -1,9 +1,8 @@
 # helix — managed natively by Home Manager, pulled from nixpkgs-unstable for a
 # recent release while the rest of the system tracks stable 24.11 (unstable is
 # already an input, so this reuses cache.nixos.org — no source compile).
-# Starter config: rose_pine theme (a built-in helix theme; no runtime file
-# needed), relative line numbers, format-on-save, and language servers for the
-# toolchains already in this config.
+# Starter config: rose_pine theme, relative line numbers, format-on-save, and
+# language servers for the toolchains already in this config.
 { pkgs, unstablePkgs, ... }:
 {
   # gopls isn't in common-packages; bring it in so the Go LSP resolves. nixd is
@@ -18,7 +17,7 @@
 
     # -> ~/.config/helix/config.toml
     settings = {
-      theme = "rose_pine";
+      theme = "rose_pine_cursor";
 
       editor = {
         line-number = "relative";
@@ -52,6 +51,11 @@
         i = ":toggle lsp.display-inlay-hints";
         w = ":toggle soft-wrap.enable";
       };
+    };
+
+    themes.rose_pine_cursor = {
+      inherits = "rose_pine";
+      "ui.cursor.primary" = { fg = "base"; bg = "rose"; };
     };
 
     # -> ~/.config/helix/languages.toml — format-on-save + language servers.
