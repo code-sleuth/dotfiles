@@ -58,7 +58,10 @@
     languages = {
       language-server = {
         nixd.command = "nixd";
-        gopls.command = "gopls";
+        gopls = {
+          command = "gopls";
+          config.buildFlags = [ "-tags=e2e,integration,live" ];
+        };
         rust-analyzer.config.check.command = "clippy";
       };
 
