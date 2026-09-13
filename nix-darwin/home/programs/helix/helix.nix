@@ -38,7 +38,7 @@
 
         lsp = {
           display-messages = true;
-          display-inlay-hints = true;
+          display-inlay-hints = false;
         };
 
         statusline = {
@@ -46,8 +46,11 @@
           center = [ ];
           right = [ "diagnostics" "selections" "position" "file-encoding" "file-type" ];
         };
+      };
 
-        soft-wrap.enable = true;
+      keys.normal.space.t = {
+        i = ":toggle lsp.display-inlay-hints";
+        w = ":toggle soft-wrap.enable";
       };
     };
 
