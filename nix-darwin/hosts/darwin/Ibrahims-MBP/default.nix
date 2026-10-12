@@ -1,6 +1,10 @@
-{ username, ... }:
+{ username, pkgs, ... }:
 {
   nix.enable = false;
+
+  environment.systemPackages = with pkgs; [
+    terraform
+  ];
 
   home-manager.users.${username}.home.file.".config/git-identity".text = ''
     [user]
