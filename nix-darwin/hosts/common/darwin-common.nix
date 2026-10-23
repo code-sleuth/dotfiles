@@ -131,6 +131,7 @@
       "ghostty"
       "zed" # Code editor
       "zen" # Zen Browser
+      "aside" # AI browser, the one gstack drives first
       "coderabbit"
     ];
 
