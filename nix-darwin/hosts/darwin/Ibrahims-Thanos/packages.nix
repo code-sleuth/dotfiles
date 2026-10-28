@@ -70,7 +70,7 @@
     buildkit
 
     # Development Services
-    redis
+    # redis
     protobuf
 
     # Security & Cryptography
