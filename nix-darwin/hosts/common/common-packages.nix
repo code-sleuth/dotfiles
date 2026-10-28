@@ -57,6 +57,7 @@
     # Core System Utilities
     wget
     direnv
+    ssm-session-manager-plugin
 
     # Version Control & Collaboration
     gh
