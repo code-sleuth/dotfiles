@@ -230,5 +230,14 @@
     "com.apple.TimeMachine".DoNotOfferNewDisksForBackup = true;
     # Prevent Photos from opening automatically when devices are plugged in
     "com.apple.ImageCapture".disableHotPlug = true;
+    "com.superlogical.rex" = {
+      "Workspace.terminalFontName" = "JetBrainsMono Nerd Font";
+      "Workspace.terminalFontPointSize" = 18.0;
+      "Workspace.terminalFontSmoothing" = true;
+      "Workspace.terminalCursorStyle" = "block";
+      "Workspace.terminalCopyOnSelect" = true;
+      "Workspace.terminalPaddingX" = 10.0;
+      "Workspace.terminalPaddingY" = 10.0;
+    };
   };
 }
