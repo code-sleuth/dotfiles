@@ -46,6 +46,10 @@
       source = ../../ghostty;
       enable = true;
     };
+    ".config/rex/init.lua" = {
+      source = ../../rex/init.lua;
+      enable = true;
+    };
     ".config/aerospace" = {
       source = ../../aerospace;
       enable = true;
