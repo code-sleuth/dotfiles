@@ -128,3 +128,7 @@ if ('/Users/code/.nvm/versions/node' | path exists) {
         $env.PATH = ($env.PATH | split row (char esep) | prepend ($current_node | path join 'bin') | uniq)
     }
 }
+
+if ($env.REX_BIN_DIR? | is-not-empty) {
+    $env.PATH = ($env.PATH | split row (char esep) | prepend $env.REX_BIN_DIR)
+}
