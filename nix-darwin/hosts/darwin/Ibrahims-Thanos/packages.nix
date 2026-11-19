@@ -72,6 +72,7 @@
     # Development Services
     # redis
     protobuf
+    stripe-cli
 
     # Security & Cryptography
     pass
