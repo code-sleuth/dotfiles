@@ -6,5 +6,6 @@
     ./tmux/tmux.nix
     ./helix/helix.nix
     ./bat/bat.nix
+    ./go/go.nix
   ];
 }
