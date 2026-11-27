@@ -36,7 +36,7 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.backupFileExtension = "backup";
-          home-manager.extraSpecialArgs = { inherit inputs unstablePkgs hostname; };
+          home-manager.extraSpecialArgs = { inherit inputs unstablePkgs; };
           home-manager.users.${username} = {
             imports = [ ./../home/${username}.nix ];
           };

@@ -280,3 +280,7 @@ action = "float"
 [[rules]]
 bundle_id = "net.whatsapp.WhatsApp"
 action = "float"
+
+[[workspaces]]
+workspace = 1
+monitor = "LC49G95T"

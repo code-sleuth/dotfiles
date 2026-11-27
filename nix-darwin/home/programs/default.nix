@@ -7,5 +7,6 @@
     ./helix/helix.nix
     ./bat/bat.nix
     ./go/go.nix
+    ./spaceman/spaceman.nix
   ];
 }
