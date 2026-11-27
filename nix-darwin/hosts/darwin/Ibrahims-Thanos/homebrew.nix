@@ -2,7 +2,6 @@
 {
   homebrew = {
     casks = [
-      # "aerospace" — moved to nixpkgs (pkgs.aerospace); nikitabobko/tap was untrusted
       "stats" # macOS system monitor (not in nix)
       "google-chrome" # chrome
       "slack" # Team communication

@@ -51,10 +51,6 @@
       source = ../../rex/init.lua;
       enable = true;
     };
-    ".config/aerospace" = {
-      source = ../../aerospace;
-      enable = true;
-    };
     ".config/sketchybar" = {
       source = ../../sketchybar;
       enable = true;

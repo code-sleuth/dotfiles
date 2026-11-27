@@ -327,7 +327,6 @@ source $HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 # use atuin for history
 source $HOME/.config/scripts/atuin.sh
 alias asr="atuin scripts run"
-alias as="aerospace"
 alias v="nvim"
 
 # ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#606090'

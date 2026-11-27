@@ -71,7 +71,6 @@
     mkalias
 
     # GUI Applications
-    aerospace
     raycast
     google-chrome
 
