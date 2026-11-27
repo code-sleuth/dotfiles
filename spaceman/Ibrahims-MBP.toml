@@ -1,0 +1,282 @@
+# Spaceman configuration.
+version = 1
+
+[settings.gaps]
+inner = 6
+top = 6
+bottom = 6
+left = 6
+right = 6
+
+[[rules]]
+bundle_id = "at.studio.AsideBrowser"
+action = "route"
+workspace = 1
+
+[[rules]]
+bundle_id = "com.tinyspeck.slackmacgap"
+action = "route"
+workspace = 1
+
+[[rules]]
+bundle_id = "dev.zed.Zed"
+action = "route"
+workspace = 1
+
+[[rules]]
+bundle_id = "com.superlogical.rex"
+action = "route"
+workspace = 1
+
+[[rules]]
+bundle_id = "app.zen-browser.zen"
+action = "route"
+workspace = 1
+
+[[rules]]
+bundle_id = "com.apple.Passwords"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.finder"
+action = "float"
+
+[[rules]]
+bundle_id = "com.anthropic.claudefordesktop"
+action = "float"
+
+[[rules]]
+bundle_id = "io.tailscale.ipn.macsys"
+action = "float"
+
+[[rules]]
+bundle_id = "com.spotify.client"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.Preview"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.ActivityMonitor"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.airport.airportutility"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.AppStore"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.audio.AudioMIDISetup"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.Automator"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.BluetoothFileExchange"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.iBooksX"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.business-essentials"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.iCal"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.Chess"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.ColorSyncUtility"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.Console"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.AddressBook"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.DiskUtility"
+action = "float"
+
+[[rules]]
+bundle_id = "com.docker.docker"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.FaceTime"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.findmy"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.FontBook"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.freeform"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.games"
+action = "float"
+
+[[rules]]
+bundle_id = "com.mitchellh.ghostty"
+action = "float"
+
+[[rules]]
+bundle_id = "com.google.Chrome"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.grapher"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.Home"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.Image_Capture"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.GenerativePlaygroundApp"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.ScreenContinuity"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.journal"
+action = "float"
+
+[[rules]]
+bundle_id = "com.logitech.logitune"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.Magnifier"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.mail"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.Maps"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.MobileSMS"
+action = "float"
+
+[[rules]]
+bundle_id = "com.microsoft.Word"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.MigrateAssistant"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.Music"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.news"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.Notes"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.mobilephone"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.Photos"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.podcasts"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.printcenter"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.QuickTimePlayerX"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.reminders"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.Safari"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.ScreenSharing"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.ScriptEditor2"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.shortcuts"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.stocks"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.SystemProfiler"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.Terminal"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.TextEdit"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.helpviewer"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.TV"
+action = "float"
+
+[[rules]]
+bundle_id = "com.apple.VoiceOverUtility"
+action = "float"
+
+[[rules]]
+bundle_id = "net.whatsapp.WhatsApp"
+action = "float"

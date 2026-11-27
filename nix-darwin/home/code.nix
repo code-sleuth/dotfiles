@@ -3,6 +3,7 @@
 , inputs
 , pkgs
 , lib
+, hostname
 , ...
 }:
 {
@@ -120,6 +121,10 @@
     };
     "Library/Preferences/pnpm/config.yaml" = {
       source = ../../pnpm/config.yaml;
+      enable = true;
+    };
+    "Library/Application Support/Spaceman/config.toml" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/spaceman/${hostname}.toml";
       enable = true;
     };
     ".bunfig.toml" = {
