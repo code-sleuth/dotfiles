@@ -43,6 +43,10 @@ let
       SPACEMAN_CONFIG="$target" "${spaceman}" rules list --json \
         | jq -r '.rules[] | select(.action == "route" and .title == null and .title_contains == null) | "\(.bundle_id) \(.workspace)"' \
         | while read -r bundle workspace; do
+            if [[ -z "$(lsappinfo find bundleid="$bundle")" ]]; then
+              echo "$(date -u +%FT%TZ) skipped $bundle, it is not running"
+              continue
+            fi
             "${spaceman}" ctl move-app "$bundle" "$workspace" >/dev/null
             echo "$(date -u +%FT%TZ) moved $bundle to workspace $workspace"
           done
